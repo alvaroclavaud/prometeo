@@ -33,10 +33,18 @@ jobs:
         if: github.event_name == 'schedule'
         run: |
           python3 - <<'EOF'
-          import json, os
+          import calendar, json, os
           from datetime import datetime, timezone
-          from zoneinfo import ZoneInfo
-          ahora = datetime.now(timezone.utc); hora = ahora.astimezone(ZoneInfo('Europe/Madrid')).hour
+          ahora = datetime.now(timezone.utc)
+          try:
+              from zoneinfo import ZoneInfo
+              hora = ahora.astimezone(ZoneInfo('Europe/Madrid')).hour
+          except Exception:                      # sin base de zonas horarias: regla europea del horario de verano
+              def cambio(mes):
+                  d = calendar.monthrange(ahora.year, mes)[1]
+                  while datetime(ahora.year, mes, d).weekday() != 6: d -= 1
+                  return datetime(ahora.year, mes, d, 1, tzinfo=timezone.utc)
+              hora = (ahora.hour + (2 if cambio(3) <= ahora < cambio(10) else 1)) % 24
           try: horas = (ahora - datetime.fromisoformat(json.load(open('data/estado.json'))['generado'].replace('Z', '+00:00'))).total_seconds() / 3600
           except Exception: horas = 999
           toca = (hora in (6, 12, 18, 23) and horas > 2) or (hora in (7, 8, 13, 14, 19, 20) and horas > 3)
