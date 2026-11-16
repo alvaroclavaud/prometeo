@@ -1,0 +1,7 @@
+pipeline/raw.json
+pipeline/muestra.json
+pipeline/muestra.txt
+pipeline/etiquetas.txt
+pipeline/aux_*.json
+pipeline/informe.json
+__pycache__/

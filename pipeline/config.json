@@ -1,0 +1,600 @@
+{
+ "pol": [
+  [
+   "sanchez",
+   "\"Pedro Sánchez\"",
+   "Pedro Sánchez"
+  ],
+  [
+   "feijoo",
+   "\"Feijóo\"",
+   "Alberto Núñez Feijóo"
+  ],
+  [
+   "abascal",
+   "\"Abascal\"",
+   "Santiago Abascal"
+  ],
+  [
+   "cuerpo",
+   "\"Carlos Cuerpo\"",
+   "Carlos Cuerpo"
+  ],
+  [
+   "diaz",
+   "\"Yolanda Díaz\"",
+   "Yolanda Díaz"
+  ],
+  [
+   "aagesen",
+   "\"Sara Aagesen\"",
+   "Sara Aagesen"
+  ],
+  [
+   "bolanos",
+   "\"Félix Bolaños\"",
+   "Félix Bolaños"
+  ],
+  [
+   "espana",
+   "\"Arcadi España\"",
+   "Arcadi España"
+  ],
+  [
+   "albares",
+   "\"Albares\"",
+   "José Manuel Albares"
+  ],
+  [
+   "robles",
+   "\"Margarita Robles\"",
+   "Margarita Robles"
+  ],
+  [
+   "marlaska",
+   "\"Marlaska\"",
+   "Fernando Grande-Marlaska"
+  ],
+  [
+   "puente",
+   "\"Óscar Puente\"",
+   "Óscar Puente"
+  ],
+  [
+   "garcia",
+   "\"Mónica García\" (Sanidad OR ministra OR \"Más Madrid\")",
+   "Mónica García Gómez"
+  ],
+  [
+   "cerdan",
+   "\"Santos Cerdán\"",
+   "Santos Cerdán"
+  ],
+  [
+   "gamarra",
+   "\"Cuca Gamarra\"",
+   "Cuca Gamarra"
+  ],
+  [
+   "tellado",
+   "\"Tellado\"",
+   "Miguel Tellado"
+  ],
+  [
+   "millan",
+   "\"Pepa Millán\"",
+   "Pepa Millán"
+  ],
+  [
+   "ayuso",
+   "\"Ayuso\"",
+   "Isabel Díaz Ayuso"
+  ],
+  [
+   "moreno",
+   "\"Juanma Moreno\" OR \"Moreno Bonilla\"",
+   "Juan Manuel Moreno"
+  ],
+  [
+   "illa",
+   "\"Salvador Illa\"",
+   "Salvador Illa"
+  ],
+  [
+   "pradales",
+   "\"Pradales\"",
+   "Imanol Pradales"
+  ],
+  [
+   "rueda",
+   "\"Alfonso Rueda\"",
+   "Alfonso Rueda"
+  ],
+  [
+   "page",
+   "\"García-Page\"",
+   "Emiliano García-Page"
+  ],
+  [
+   "mazon",
+   "\"Mazón\"",
+   "Carlos Mazón"
+  ],
+  [
+   "puigdemont",
+   "\"Puigdemont\"",
+   "Carles Puigdemont"
+  ],
+  [
+   "rufian",
+   "\"Rufián\"",
+   "Gabriel Rufián"
+  ],
+  [
+   "nogueras",
+   "\"Míriam Nogueras\"",
+   "Míriam Nogueras"
+  ],
+  [
+   "otegi",
+   "\"Otegi\"",
+   "Arnaldo Otegi"
+  ],
+  [
+   "esteban",
+   "\"Aitor Esteban\"",
+   "Aitor Esteban"
+  ],
+  [
+   "belarra",
+   "\"Belarra\"",
+   "Ione Belarra"
+  ],
+  [
+   "montero_mj",
+   "\"María Jesús Montero\"",
+   "María Jesús Montero"
+  ],
+  [
+   "alegria",
+   "\"Pilar Alegría\"",
+   "Pilar Alegría"
+  ],
+  [
+   "urtasun",
+   "\"Urtasun\"",
+   "Ernest Urtasun"
+  ],
+  [
+   "saiz",
+   "\"Elma Saiz\"",
+   "Elma Saiz"
+  ],
+  [
+   "torres",
+   "\"Ángel Víctor Torres\"",
+   "Ángel Víctor Torres"
+  ],
+  [
+   "redondo",
+   "\"Ana Redondo\" (ministra OR Igualdad)",
+   "Ana Redondo"
+  ],
+  [
+   "semper",
+   "\"Sémper\"",
+   "Borja Sémper"
+  ],
+  [
+   "funez",
+   "\"Carmen Fúnez\"",
+   "Carmen Fúnez"
+  ],
+  [
+   "bendodo",
+   "\"Bendodo\"",
+   "Elías Bendodo"
+  ],
+  [
+   "buxade",
+   "\"Buxadé\"",
+   "Jorge Buxadé"
+  ],
+  [
+   "garriga",
+   "\"Ignacio Garriga\"",
+   "Ignacio Garriga"
+  ],
+  [
+   "almeida",
+   "\"Martínez-Almeida\" OR (\"Almeida\" alcalde Madrid)",
+   "José Luis Martínez-Almeida"
+  ],
+  [
+   "collboni",
+   "\"Collboni\"",
+   "Jaume Collboni"
+  ],
+  [
+   "guardiola",
+   "\"María Guardiola\"",
+   "María Guardiola"
+  ],
+  [
+   "azcon",
+   "\"Azcón\"",
+   "Jorge Azcón"
+  ],
+  [
+   "prohens",
+   "\"Prohens\"",
+   "Marga Prohens"
+  ],
+  [
+   "clavijo",
+   "\"Fernando Clavijo\"",
+   "Fernando Clavijo"
+  ],
+  [
+   "aragones",
+   "\"Pere Aragonès\"",
+   "Pere Aragonès"
+  ],
+  [
+   "matute",
+   "\"Oskar Matute\"",
+   "Oskar Matute"
+  ],
+  [
+   "montero_i",
+   "\"Irene Montero\"",
+   "Irene Montero"
+  ]
+ ],
+ "n1": [
+  "sanchez",
+  "feijoo",
+  "abascal"
+ ],
+ "med": [
+  [
+   "elespanol",
+   "elespanol.com"
+  ],
+  [
+   "as",
+   "as.com"
+  ],
+  [
+   "elmundo",
+   "elmundo.es"
+  ],
+  [
+   "elpais",
+   "elpais.com"
+  ],
+  [
+   "marca",
+   "marca.com"
+  ],
+  [
+   "abc",
+   "abc.es"
+  ],
+  [
+   "elconfidencial",
+   "elconfidencial.com"
+  ],
+  [
+   "elperiodico",
+   "elperiodico.com"
+  ],
+  [
+   "rtve",
+   "rtve.es"
+  ],
+  [
+   "okdiario",
+   "okdiario.com"
+  ],
+  [
+   "20minutos",
+   "20minutos.es"
+  ],
+  [
+   "antena3",
+   "antena3.com"
+  ],
+  [
+   "ser",
+   "cadenaser.com"
+  ],
+  [
+   "lasexta",
+   "lasexta.com"
+  ],
+  [
+   "cope",
+   "cope.es"
+  ],
+  [
+   "telecinco",
+   "telecinco.es"
+  ],
+  [
+   "ondacero",
+   "ondacero.es"
+  ]
+ ],
+ "tem": [
+  [
+   "inseguridad",
+   "(inseguridad OR delincuencia OR criminalidad OR robos)",
+   [
+    "Ceuta"
+   ],
+   "7d"
+  ],
+  [
+   "economia",
+   "(economía OR empleo OR paro OR vivienda OR inflación)",
+   [
+    "Madrid",
+    "Barcelona"
+   ],
+   "2d"
+  ],
+  [
+   "inmigracion",
+   "(inmigración OR inmigrantes OR migrantes OR pateras OR cayucos)",
+   [],
+   "7d"
+  ],
+  [
+   "campana",
+   "(elecciones generales OR \"29-N\" OR campaña electoral OR sondeo)",
+   [],
+   ""
+  ]
+ ],
+ "prov": [
+  [
+   "01",
+   "Álava"
+  ],
+  [
+   "02",
+   "Albacete"
+  ],
+  [
+   "03",
+   "Alicante"
+  ],
+  [
+   "04",
+   "Almería"
+  ],
+  [
+   "05",
+   "Ávila"
+  ],
+  [
+   "06",
+   "Badajoz"
+  ],
+  [
+   "07",
+   "Baleares"
+  ],
+  [
+   "08",
+   "Barcelona"
+  ],
+  [
+   "09",
+   "Burgos"
+  ],
+  [
+   "10",
+   "Cáceres"
+  ],
+  [
+   "11",
+   "Cádiz"
+  ],
+  [
+   "12",
+   "Castellón"
+  ],
+  [
+   "13",
+   "Ciudad Real"
+  ],
+  [
+   "14",
+   "Córdoba"
+  ],
+  [
+   "15",
+   "A Coruña"
+  ],
+  [
+   "16",
+   "Cuenca"
+  ],
+  [
+   "17",
+   "Girona"
+  ],
+  [
+   "18",
+   "Granada"
+  ],
+  [
+   "19",
+   "Guadalajara"
+  ],
+  [
+   "20",
+   "Gipuzkoa"
+  ],
+  [
+   "21",
+   "Huelva"
+  ],
+  [
+   "22",
+   "Huesca"
+  ],
+  [
+   "23",
+   "Jaén"
+  ],
+  [
+   "24",
+   "León"
+  ],
+  [
+   "25",
+   "Lleida"
+  ],
+  [
+   "26",
+   "La Rioja"
+  ],
+  [
+   "27",
+   "Lugo"
+  ],
+  [
+   "28",
+   "Madrid"
+  ],
+  [
+   "29",
+   "Málaga"
+  ],
+  [
+   "30",
+   "Murcia"
+  ],
+  [
+   "31",
+   "Navarra"
+  ],
+  [
+   "32",
+   "Ourense"
+  ],
+  [
+   "33",
+   "Asturias"
+  ],
+  [
+   "34",
+   "Palencia"
+  ],
+  [
+   "35",
+   "Las Palmas"
+  ],
+  [
+   "36",
+   "Pontevedra"
+  ],
+  [
+   "37",
+   "Salamanca"
+  ],
+  [
+   "38",
+   "Tenerife"
+  ],
+  [
+   "39",
+   "Cantabria"
+  ],
+  [
+   "40",
+   "Segovia"
+  ],
+  [
+   "41",
+   "Sevilla"
+  ],
+  [
+   "42",
+   "Soria"
+  ],
+  [
+   "43",
+   "Tarragona"
+  ],
+  [
+   "44",
+   "Teruel"
+  ],
+  [
+   "45",
+   "Toledo"
+  ],
+  [
+   "46",
+   "Valencia"
+  ],
+  [
+   "47",
+   "Valladolid"
+  ],
+  [
+   "48",
+   "Bizkaia"
+  ],
+  [
+   "49",
+   "Zamora"
+  ],
+  [
+   "50",
+   "Zaragoza"
+  ],
+  [
+   "51",
+   "Ceuta"
+  ],
+  [
+   "52",
+   "Melilla"
+  ]
+ ],
+ "bsky": [
+  [
+   "sanchez",
+   "\"Pedro Sánchez\""
+  ],
+  [
+   "feijoo",
+   "Feijóo"
+  ],
+  [
+   "abascal",
+   "Abascal"
+  ],
+  [
+   "inseguridad",
+   "inseguridad"
+  ],
+  [
+   "economia",
+   "vivienda"
+  ],
+  [
+   "inmigracion",
+   "inmigración"
+  ],
+  [
+   "campana",
+   "elecciones generales"
+  ]
+ ]
+}

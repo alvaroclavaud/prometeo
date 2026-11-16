@@ -1,0 +1,48 @@
+name: Recogida de Prometeo
+
+on:
+  schedule:
+    # 05:12, 11:12 y 17:12 UTC = 6:12, 12:12 y 18:12 en España (una hora más en horario de verano)
+    - cron: '12 5,11,17 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: recogida
+  cancel-in-progress: false
+
+jobs:
+  recoger:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Dependencias
+        run: pip install --quiet requests beautifulsoup4 tzdata
+      - name: Recoger fuentes públicas
+        working-directory: pipeline
+        run: python recoger.py
+      - name: Preparar muestra
+        working-directory: pipeline
+        run: python prom.py muestra
+      - name: Clasificar titulares (solo si existe el secreto GEMINI_API_KEY)
+        working-directory: pipeline
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python clasificar.py
+      - name: Calcular y escribir datos
+        working-directory: pipeline
+        run: python prom.py publicar --repo --auto-informe
+      - name: Publicar
+        run: |
+          git config user.name "prometeo-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data
+          git diff --cached --quiet && echo "Sin cambios" && exit 0
+          git commit -m "Recogida $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push
