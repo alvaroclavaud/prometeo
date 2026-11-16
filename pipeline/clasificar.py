@@ -17,6 +17,14 @@ Aplica exactamente el mismo criterio a todos los partidos. Para cada línea nume
 - emocion: emoción dominante del texto: "ira", "miedo", "esperanza", "burla", "orgullo", "tristeza" o "ninguna".
 - tema: "economia", "vivienda", "inmigracion", "seguridad", "justicia" (corrupción y tribunales), "campana" (elecciones, mítines, sondeos, pactos), "territorial", "exterior", "social" (sanidad, educación, igualdad) u "otros".
 Criterio: declaraciones propias de la persona, sin más = neutro / informativo. Ataques o críticas de rivales que el titular reproduce = negativo / contra. Apoyos y elogios = positivo / favor. Malas noticias para la persona contadas sin opinar = negativo / informativo.
+Sé estricto con "positivo": solo cuando un tercero apoya o elogia a la persona, se le reconoce un logro o hay una buena noticia objetiva para ella (una encuesta favorable, una victoria). Una promesa, un anuncio o un acto de gobierno contado sin valorar es neutro.
+Ejemplos:
+[Alberto Núñez Feijóo] Feijóo promete bajar impuestos a los autónomos -> neutro, informativo
+[Alberto Núñez Feijóo] Rueda asegura que Feijóo «merece la pena» -> positivo, favor
+[Pedro Sánchez] Tellado llama a Sánchez «el Kirchner de España» -> negativo, contra
+[Pedro Sánchez] El Gobierno de Sánchez aprueba una ayuda para el campo -> neutro, informativo
+[Santiago Abascal] Abascal acusa al Gobierno de ser una mafia -> neutro, informativo (él es quien ataca)
+[Pedro Sánchez] Un sondeo da a Sánchez su peor resultado -> negativo, informativo
 Si la línea es de un TEMA (no de una persona), valora el tono general de la noticia y pon postura "informativo".
 Responde solo con JSON: {"r":[{"tono":"...","postura":"...","emocion":"...","tema":"..."}, ...]} con un objeto por línea, en el mismo orden y sin saltarte ninguna.'''
 MAPA = [{'positivo': 'P', 'negativo': 'N', 'neutro': 'U'}, {'favor': 'F', 'contra': 'C', 'informativo': 'N'},
