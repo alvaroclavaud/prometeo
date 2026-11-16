@@ -2,9 +2,18 @@ name: Recogida de Prometeo
 
 on:
   schedule:
-    # 05:12, 11:12 y 17:12 UTC = 6:12, 12:12 y 18:12 en España (una hora más en horario de verano)
-    - cron: '12 5,11,17 * * *'
+    # GitHub trabaja en hora UTC y no entiende de horario de verano. Por eso se despierta varias veces
+    # y el paso «Turno» decide con la hora de España (todo el año igual):
+    #   6:12, 12:12 y 18:12            → recogida normal
+    #   una y dos horas después        → nuevo intento, solo si el turno anterior no llegó a publicar
+    #   resto de despertares           → no hace nada (dura unos segundos)
+    - cron: '12 4-7,10-13,16-19 * * *'
   workflow_dispatch:
+    inputs:
+      reclasificar:
+        description: 'Volver a clasificar todos los titulares (no reutiliza las etiquetas ya publicadas)'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -16,33 +25,58 @@ concurrency:
 jobs:
   recoger:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
+      - name: Turno (¿toca recoger ahora?)
+        id: turno
+        if: github.event_name == 'schedule'
+        run: |
+          python3 - <<'EOF'
+          import json, os
+          from datetime import datetime, timezone
+          from zoneinfo import ZoneInfo
+          ahora = datetime.now(timezone.utc); hora = ahora.astimezone(ZoneInfo('Europe/Madrid')).hour
+          try: horas = (ahora - datetime.fromisoformat(json.load(open('data/estado.json'))['generado'].replace('Z', '+00:00'))).total_seconds() / 3600
+          except Exception: horas = 999
+          toca = (hora in (6, 12, 18) and horas > 2) or (hora in (7, 8, 13, 14, 19, 20) and horas > 3)
+          print('Hora en España: %d h · última recogida publicada hace %.1f h · %s' % (hora, horas, 'se recoge' if toca else 'no toca, se salta'))
+          if not toca: open(os.environ['GITHUB_OUTPUT'], 'a').write('saltar=1\n')
+          EOF
       - uses: actions/setup-python@v5
+        if: steps.turno.outputs.saltar != '1'
         with:
           python-version: '3.12'
       - name: Dependencias
+        if: steps.turno.outputs.saltar != '1'
         run: pip install --quiet requests beautifulsoup4 tzdata
       - name: Recoger fuentes públicas
+        if: steps.turno.outputs.saltar != '1'
         working-directory: pipeline
         run: python recoger.py
       - name: Preparar muestra
+        if: steps.turno.outputs.saltar != '1'
         working-directory: pipeline
         run: python prom.py muestra
-      - name: Clasificar titulares (solo si existe el secreto GEMINI_API_KEY)
+      - name: Clasificar titulares (solo si existe el secreto GEMINI_API_KEY; si falla, se publica igualmente)
+        if: steps.turno.outputs.saltar != '1'
         working-directory: pipeline
+        continue-on-error: true
+        timeout-minutes: 20
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PROM_RECLASIFICAR: ${{ inputs.reclasificar && '1' || '' }}
         run: python clasificar.py
       - name: Calcular y escribir datos
+        if: steps.turno.outputs.saltar != '1'
         working-directory: pipeline
         run: python prom.py publicar --repo --auto-informe
       - name: Publicar
+        if: steps.turno.outputs.saltar != '1'
         run: |
           git config user.name "prometeo-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data
           git diff --cached --quiet && echo "Sin cambios" && exit 0
           git commit -m "Recogida $(date -u +%Y-%m-%dT%H:%MZ)"
-          git push
+          git push || (git pull --rebase origin main && git push)

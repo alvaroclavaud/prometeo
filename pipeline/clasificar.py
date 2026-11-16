@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
 # Prometeo · clasificación de titulares con un modelo gratuito (Gemini, nivel gratuito de Google AI Studio).
 # Lee pipeline/muestra.json y escribe pipeline/etiquetas.txt. Sin clave (secreto GEMINI_API_KEY) no clasifica y el panel
-# muestra los titulares como «sin clasificar».
-import json, os, re, sys, time
+# muestra los titulares como «sin clasificar». Nunca debe impedir la publicación: tiene un límite de tiempo, guarda lo que
+# lleva tras cada lote y no vuelve a enviar al modelo los titulares que ya están clasificados en data/.
+import glob, json, os, re, sys, time
 import requests
 
 W = os.path.dirname(os.path.abspath(__file__))
 KEY = os.environ.get('GEMINI_API_KEY', '').strip()
 BASE = 'https://generativelanguage.googleapis.com/v1beta/'
-LOTE = int(os.environ.get('PROM_LOTE', '30')); ESPERA = float(os.environ.get('PROM_ESPERA', '7'))
+LOTE = int(os.environ.get('PROM_LOTE', '30')); ESPERA = float(os.environ.get('PROM_ESPERA', '5'))
+T0 = time.time(); MAX_MIN = float(os.environ.get('PROM_CLAS_MIN', '16'))          # minutos como máximo dedicados a clasificar
+def queda(): return MAX_MIN * 60 - (time.time() - T0)
 OK = re.compile(r'^([PNU][FCN][IMEBOTX][EVISCLTXAO]|----)$')
 INSTR = '''Clasificas titulares de prensa y publicaciones de redes sobre política española para una plataforma de escucha social.
 Aplica exactamente el mismo criterio a todos los partidos. Para cada línea numerada devuelve un objeto con cuatro campos:
@@ -55,16 +58,32 @@ def modelos():
     pref = [m for m in lite if m.endswith('latest')] + [m for m in lite if not m.endswith('latest')] + resto
     return pref[:6]
 
+def previas():
+    """Etiquetas ya publicadas en data/dia-*.json, por (persona o '_' si es un tema, titular)."""
+    out = {}
+    if os.environ.get('PROM_RECLASIFICAR'): return out
+    for fp in sorted(glob.glob(os.path.join(W, '..', 'data', 'dia-*.json')))[-3:]:
+        try:
+            for m in json.load(open(fp, encoding='utf-8'))['menciones']:
+                for k, c in (m.get('c') or {}).items():
+                    if OK.match(c): out[(k, m['t'])] = c
+        except Exception as e: print('  aviso: no se pudo leer', os.path.basename(fp), repr(e)[:60])
+    return out
+
 def pedir(modelo, texto):
-    for intento in range(4):
+    for intento in range(3):
+        if queda() <= 0: raise RuntimeError('sin tiempo')
         cfg = {'temperature': 0, 'responseMimeType': 'application/json'}
         if pedir.esquema: cfg['responseSchema'] = ESQUEMA
-        r = requests.post(BASE + modelo + ':generateContent', headers={'x-goog-api-key': KEY}, timeout=120, json={'contents': [{'parts': [{'text': texto}]}], 'generationConfig': cfg})
+        try: r = requests.post(BASE + modelo + ':generateContent', headers={'x-goog-api-key': KEY}, timeout=90, json={'contents': [{'parts': [{'text': texto}]}], 'generationConfig': cfg})
+        except requests.RequestException as e:
+            if intento == 2: raise RuntimeError('sin respuesta: ' + type(e).__name__)
+            time.sleep(10); continue
         if r.status_code == 400 and pedir.esquema: pedir.esquema = False; continue      # modelo sin soporte de esquema: se pide sin él
         if r.status_code == 200:
             try: return json.loads(r.json()['candidates'][0]['content']['parts'][0]['text']).get('r', [])
             except Exception: return []
-        if r.status_code in (429, 500, 503): time.sleep(30 * (intento + 1)); continue
+        if r.status_code in (429, 500, 503): time.sleep(max(0, min(15 * (intento + 1), queda()))); continue
         raise RuntimeError('%s %s' % (r.status_code, r.text[:160]))
     raise RuntimeError('límite de uso del modelo')
 
@@ -79,24 +98,35 @@ def main():
         open(sal, 'w').close(); print('No se pudo consultar la lista de modelos:', repr(e)[:120]); return
     nombres = {p[0]: p[2] for p in json.load(open(os.path.join(W, 'config.json')))['pol']}
     et, modelo = {}, None
-    for a in range(0, len(filas), LOTE):
-        lote = filas[a:a + LOTE]
+    ya = previas()
+    for n, r in enumerate(filas):
+        c = ya.get((r['pid'] if r['tipo'] == 'm' else '_', r['texto'])) if r['tipo'] in ('m', 't') else None
+        if c: et[n] = c
+    pend = [n for n in range(len(filas)) if n not in et]
+    print('Filas: %d · ya clasificadas en recogidas anteriores: %d · nuevas: %d' % (len(filas), len(et), len(pend)), flush=True)
+    def guardar():
+        with open(sal, 'w') as f:
+            for n in sorted(et): f.write('%d %s\n' % (n, et[n]))
+    guardar(); cand = cand[:3]
+    for a in range(0, len(pend), LOTE):
+        if queda() < 45: print('Se acabó el tiempo de clasificación: quedan %d filas sin clasificar.' % (len(pend) - a)); break
+        idx = pend[a:a + LOTE]; lote = [filas[n] for n in idx]
         lin = ['%d. [%s] %s — %s' % (i + 1, ('TEMA: ' + r['pid']) if r['tipo'] == 't' else (('BLUESKY sobre ' if r['tipo'] == 'b' else '') + nombres.get(r['pid'], r['pid'])), r['texto'], r['fuente']) for i, r in enumerate(lote)]
         texto = INSTR + '\n\n' + '\n'.join(lin)
         res = None
         for m in ([modelo] if modelo else cand):
             try: res = pedir(m, texto); modelo = m; break
             except Exception as e: print('  modelo', m, 'no disponible:', repr(e)[:100])
-        if res is None: print('Clasificación interrumpida en la fila', a); break
+        if res is None: print('Clasificación interrumpida: quedan %d filas sin clasificar.' % (len(pend) - a)); break
         if len(res) != len(lote): print('  aviso: el modelo devolvió', len(res), 'respuestas para', len(lote), 'filas; se descarta el lote'); res = []
         for i, o in enumerate(res):
             c = codigo(o)
-            if c and OK.match(c): et[a + i] = c
-        print('  filas %d-%d · %d etiquetas · %s' % (a, a + len(lote) - 1, len(et), modelo), flush=True)
-        time.sleep(ESPERA)
-    with open(sal, 'w') as f:
-        for n in sorted(et): f.write('%d %s\n' % (n, et[n]))
-    print('Clasificadas', len(et), 'de', len(filas), 'filas con', modelo)
+            if c and OK.match(c): et[idx[i]] = c
+        guardar()
+        print('  lote %d de %d · %d etiquetas · %s · %.1f min' % (a // LOTE + 1, (len(pend) + LOTE - 1) // LOTE, len(et), modelo, (time.time() - T0) / 60), flush=True)
+        if a + LOTE < len(pend): time.sleep(ESPERA)
+    guardar()
+    print('Clasificadas', len(et), 'de', len(filas), 'filas (%d reutilizadas) con' % (len(filas) - len(pend)), modelo)
 
 if __name__ == '__main__':
     main()

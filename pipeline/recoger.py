@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Prometeo · recogida en servidor (GitHub Actions). Todas las fuentes son públicas y gratuitas.
 # Genera pipeline/raw.json con el mismo formato que el colector de navegador (colector/colector.js).
-import json, os, re, sys, time, html, threading
+import json, os, re, sys, time, html, threading, collections
 from datetime import datetime, timezone, timedelta
 from concurrent.futures import ThreadPoolExecutor
 from urllib.parse import quote
@@ -15,8 +15,16 @@ S.headers.update({'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537
 WIKI_UA = {'User-Agent': 'PrometeoEscucha/1.0 (panel de escucha social; https://github.com/' + os.environ.get('GITHUB_REPOSITORY', 'prometeo') + ')'}
 ERR, ITEMS, KEY, LOCK = [], [], {}, threading.Lock()
 NOW = datetime.now(timezone.utc); T0 = time.time()
-PAUSA = float(os.environ.get('PROM_PAUSA', '0.35'))       # segundos entre consultas de cada hilo
-HILOS = int(os.environ.get('PROM_HILOS', '3'))
+PAUSA = float(os.environ.get('PROM_PAUSA', '0.6'))        # segundos entre consultas de cada hilo
+HILOS = int(os.environ.get('PROM_HILOS', '2'))
+MAX_MIN = float(os.environ.get('PROM_MAX_MIN', '20'))     # pasado este tiempo se dejan las consultas no esenciales (provincias)
+TOPE_MIN = float(os.environ.get('PROM_TOPE_MIN', '30'))   # pasado este tiempo sin lo esencial se abandona sin publicar nada
+FRENO = {'pausa': PAUSA, 'abortar': False}                # si Google frena, baja el ritmo; si no responde nada, se abandona pronto
+ESENCIAL = ('p7', 'p1', 'pd', 'm1', 't1', 't7')
+def minutos(): return (time.time() - T0) / 60
+def resumen():
+    c = collections.Counter(e.split(' ')[0] for e in ERR)
+    if c: print('errores por tipo:', dict(c), '· pausa actual %.2f s' % FRENO['pausa'], flush=True)
 
 def day(k): return (NOW - timedelta(days=k)).strftime('%Y-%m-%d')
 def dec(s): return html.unescape(re.sub(r'<!\[CDATA\[|\]\]>', '', s or '')).replace('\xa0', ' ').strip()
@@ -30,10 +38,13 @@ def add(t, s, dom, ts, l):
             i = len(ITEMS); ITEMS.append([t, s, dom, ts, l]); KEY[k] = i
         return i
 
-def gn(q, lite=False):
-    """Una consulta a Google News RSS (edición España). Devuelve índices de noticias o, en modo ligero, recuento y dominios."""
+def gn(q, lite=False, opcional=False):
+    """Una consulta a Google News RSS (edición España). Devuelve índices de noticias o, en modo ligero, recuento y dominios.
+    Devuelve None si no hubo respuesta válida (o si la consulta era opcional y ya no queda tiempo)."""
     u = 'https://news.google.com/rss/search?q=' + quote(q) + '&hl=es&gl=ES&ceid=ES:es'
     for a in range(3):
+        if FRENO['abortar'] or (opcional and minutos() > MAX_MIN): return None
+        if minutos() > TOPE_MIN: FRENO['abortar'] = True; return None
         try:
             r = S.get(u, timeout=30)
             if r.status_code == 200 and '<rss' in r.text[:800]:
@@ -48,16 +59,20 @@ def gn(q, lite=False):
                     l = re.sub(r'\?oc=5$', '', g(b, r'<link>(.*?)</link>').replace('https://news.google.com/rss/articles/', ''))
                     out.append(add(t, s, dom, ts, l))
                 return {'n': len(out), 'doms': [o[3] for o in out], 'top': out[:8]} if lite else out
-            ERR.append('%s %s' % (r.status_code, q[:50])); time.sleep(20 * (a + 1))
+            ERR.append('%s %s' % (r.status_code, q[:50]))
+            FRENO['pausa'] = min(1.5, FRENO['pausa'] + 0.1)
+            if not ITEMS and len(ERR) >= 9: FRENO['abortar'] = True; return None      # ni una respuesta válida: no merece la pena insistir
+            time.sleep(6 * (a + 1))
         except Exception as e:
             ERR.append('X %s %s' % (type(e).__name__, q[:50])); time.sleep(6)
     return None
 
 def pool(jobs, n=None):
     def w(j):
+        t = time.time()
         try: j()
         except Exception as e: ERR.append('J ' + repr(e)[:90])
-        time.sleep(PAUSA)
+        if time.time() - t > 0.05: time.sleep(FRENO['pausa'])
     with ThreadPoolExecutor(n or HILOS) as ex: list(ex.map(w, jobs))
 
 def minuto(s):
@@ -67,7 +82,19 @@ def minuto(s):
 def principal():
     Q, TP, BS, WK, WM = {}, {}, {}, {}, {'m': {}, 'miss': []}
     qof = {p[0]: p[1] for p in C['pol']}
-    def J(name, q): return lambda: Q.__setitem__(name, gn(q))
+    QQ = {}
+    def J(name, q):
+        QQ[name] = q; return lambda: Q.__setitem__(name, gn(q))
+    def repesca(fase):
+        """Segunda vuelta, despacio y de una en una, para las consultas que no obtuvieron respuesta. Sin lo esencial no se publica."""
+        pend = [k for k in QQ if Q.get(k) is None]
+        if pend: print(fase, 'repesca de', len(pend), 'consultas', flush=True)
+        for k in pend:
+            if minutos() > TOPE_MIN: break
+            time.sleep(4); Q[k] = gn(QQ[k])
+        falta = [k for k in QQ if Q.get(k) is None and k.split(':')[0] in ESENCIAL]
+        if falta:
+            resumen(); print('Google News no ha dado los datos esenciales (%d consultas sin respuesta: %s). No se publica nada.' % (len(falta), ', '.join(falta[:8]))); sys.exit(2)
     # A · políticos (7 días), nivel 1 por cabecera, cabeceras y temas
     jobs = [J('p7:' + p[0], p[1] + ' when:7d') for p in C['pol']]
     jobs += [J('pm:%s:%s' % (i, m[0]), '%s site:%s when:1d' % (qof[i], m[1])) for i in C['n1'] for m in C['med']]
@@ -75,9 +102,10 @@ def principal():
     for t in C['tem']:
         jobs += [J('t1:' + t[0], t[1] + ' when:1d'), J('t7:' + t[0], t[1] + ' when:7d')]
         jobs += [J('tf:%s:%s' % (t[0], f), '%s "%s" when:7d' % (t[1], f)) for f in t[2]]
-    pool(jobs); print('A', len(jobs), 'consultas ·', len(ITEMS), 'noticias ·', len(ERR), 'errores', flush=True)
-    if len(ITEMS) < 300:
-        print('Google News no responde con normalidad desde este servidor:', ERR[:5]); sys.exit(2)
+    pool(jobs); print('A', len(jobs), 'consultas ·', len(ITEMS), 'noticias ·', len(ERR), 'errores · %.1f min' % minutos(), flush=True)
+    if len(ITEMS) < 300 or FRENO['abortar']:
+        resumen(); print('Google News no responde con normalidad desde este servidor. No se publica nada.', ERR[:5]); sys.exit(2)
+    repesca('A')
     # A2 · quienes alcanzan el tope de 100 resultados: 24 h y día a día
     jobs = []
     for p in C['pol']:
@@ -85,11 +113,12 @@ def principal():
         if r and len(r) >= 95:
             jobs.append(J('p1:' + p[0], p[1] + ' when:1d'))
             jobs += [J('pd:%s:%s' % (p[0], day(k)), '%s after:%s before:%s' % (p[1], day(k), day(k - 1))) for k in range(1, 7)]
-    pool(jobs); print('A2', len(jobs), flush=True)
+    pool(jobs); repesca('A2'); print('A2', len(jobs), 'consultas ·', len(ERR), 'errores · %.1f min' % minutos(), flush=True)
     # B · temas por provincia
-    def Jp(key, q): return lambda: TP.__setitem__(key, gn(q, True))
+    def Jp(key, q): return lambda: TP.__setitem__(key, gn(q, True, True))
     jobs = [Jp('%s:%s' % (t[0], c), '%s "%s"%s when:%s' % (t[1], n, ' -"León XIV" -Papa' if n == 'León' else '', t[3])) for t in C['tem'] if t[3] for c, n in C['prov']]
-    pool(jobs); print('B', len(jobs), flush=True)
+    pool(jobs); sin = sum(1 for v in TP.values() if v is None)
+    print('B', len(jobs), 'consultas ·', sin, 'sin hacer (se conserva el último dato) · %.1f min' % minutos(), flush=True)
     # C · Bluesky
     since = (NOW - timedelta(days=1)).strftime('%Y-%m-%dT%H:%M:%SZ')
     def bs(k, q, sort, extra=''):
@@ -115,7 +144,9 @@ def principal():
         if r.status_code != 200: ERR.append('wiki %s %s' % (r.status_code, t)); return
         WK[pid] = {'t': t, 'v': [[x['timestamp'][:8], x['views']] for x in r.json().get('items', [])]}
     pool([lambda p=p: wk(p[0], p[2]) for p in C['pol']], 4); print('D wikipedia', len(WK), flush=True)
-    raw = {'cfg': C, 'gen': NOW.strftime('%Y-%m-%dT%H:%M:%S.000Z'), 'items': ITEMS, 'q': Q, 'tp': TP, 'bsky': BS, 'wiki': WK, 'wikiMap': WM, 'err': ERR, 'ms': int((time.time() - T0) * 1000)}
+    resumen()
+    raw = {'cfg': C, 'gen': NOW.strftime('%Y-%m-%dT%H:%M:%S.000Z'), 'items': ITEMS, 'q': Q, 'tp': TP, 'bsky': BS, 'wiki': WK, 'wikiMap': WM, 'err': ERR, 'ms': int((time.time() - T0) * 1000),
+           'fallidas': [k for k, v in list(Q.items()) + list(TP.items()) if v is None]}
     json.dump(raw, open(os.path.join(W, 'raw.json'), 'w'), ensure_ascii=False)
     print('raw.json ·', len(ITEMS), 'noticias ·', len(Q) + len(TP), 'consultas ·', len(ERR), 'errores ·', raw['ms'] // 1000, 's', flush=True)
 

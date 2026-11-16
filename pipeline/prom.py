@@ -180,6 +180,10 @@ def fuentes_es():
     return s
 def publicar():
     os.makedirs(DATA, exist_ok=True)
+    ANT = {}; ARR = [0]
+    if REPO and os.path.exists(os.path.join(DATA, 'ultimo.json')):
+        try: ANT = json.load(open(os.path.join(DATA, 'ultimo.json')))
+        except Exception: ANT = {}
     filas = json.load(open(os.path.join(W, 'muestra.json')))
     et = {}
     etp = os.path.join(W, 'etiquetas.txt')
@@ -258,10 +262,12 @@ def publicar():
             c = LAB.get(i, {}).get('_')
             if c: n += 1; se[c[0]] += 1; em[c[2]] += 1
         ag = [i for i in CORPUS if TRE[tid].search(ITEMS[i][0])]
-        prov = {}
+        prov = {}; ant = ((ANT.get('tem') or {}).get(tid) or {}).get('prov') or {}
         for pr in CAT['provincias']:
             x = raw['tp'].get(tid + ':' + pr['id'])
             if x: prov[pr['id']] = {'n': x['n'], 'tope': x.get('bruto', x['n']) >= 98 and x['n'] >= 90, 'x100k': round(x['n'] / (pr['pob'] / 100), 1), 'top': [[a[0], a[1], a[2]] for a in x['top'][:3]]}
+            elif pr['id'] in ant and (tid + ':' + pr['id']) in raw['tp']:      # consulta que no dio tiempo a hacer: se conserva el último dato publicado
+                prov[pr['id']] = {k: v for k, v in ant[pr['id']].items() if k != 'idx'}; ARR[0] += 1
         foco = {}
         for (a, b), v in FOCO.items():
             if a == tid:
@@ -405,7 +411,7 @@ def publicar():
     ult = {'generado': raw['gen'], 'fecha': HOY, 'ventana': [GEN_MIN - 1440, GEN_MIN], 'pol': polstats, 'tem': temstats, 'historias': hist, 'bsky': bsky, 'x': xt, 'google': gt, 'meneame': mn[:25],
            'alertas': al, 'corpus': {'n': len(CORPUS), 'medios': dict(med)},
            'cobertura': {'consultas': len(raw['q']) + len(raw['tp']), 'noticias': len(ITEMS), 'clasificadas': sum(1 for c in et.values() if c != '----'), 'errores': len(raw['err']), 'ms': raw['ms'],
-                         'bluesky': sum(b['n'] for b in bsky.values()), 'wikipedia': len(wiki), 'saturadas': sorted({s[0] for s in SAT})},
+                         'bluesky': sum(b['n'] for b in bsky.values()), 'wikipedia': len(wiki), 'saturadas': sorted({s[0] for s in SAT}), 'provAnteriores': ARR[0]},
            'informe': json.load(open(inf_p)) if os.path.exists(inf_p) else None}
     if not ult['informe'] or '--auto-informe' in sys.argv: ult['informe'] = informe_auto(ult)
     json.dump(ult, open(os.path.join(DATA, 'ultimo.json'), 'w'), ensure_ascii=False, separators=(',', ':'))
