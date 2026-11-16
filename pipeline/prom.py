@@ -225,6 +225,12 @@ def publicar():
         return M[i]
     polstats = {}
     dias8 = [(GEN.astimezone(TZ) - timedelta(days=k)).strftime('%Y-%m-%d') for k in range(7, -1, -1)]
+    HIST = {}                               # lo ya publicado por día: la cifra de un día nunca baja al recalcularla, porque Google
+    if not INICIAL:                         # solo devuelve 100 resultados por consulta y los días pasados se ven peor que en su momento
+        for x in dias8:
+            fp = os.path.join(DATA, 'hist-%s.json' % x)
+            try: HIST[x] = json.load(open(fp)) if os.path.exists(fp) else None
+            except Exception: HIST[x] = None
     for p in POLS:
         pid = p['id']; its = POL_ITEMS.get(pid, set())
         its = {i for i in its if (i, pid) not in DESC}
@@ -235,6 +241,9 @@ def publicar():
             k = dia(ITEMS[i][3])
             if k in d:
                 d[k][0] += 1; d[k][1] += (i in tit); d[k][2] += (i in tit and medio(ITEMS[i][2]) is not None)
+        for x, h in HIST.items():
+            if h:
+                for j, campo in enumerate(('vol', 'tit', 'cat')): d[x][j] = max(d[x][j], (h.get(campo) or {}).get(pid) or 0)
         v24 = [i for i in its if en24(i)]; t24 = [i for i in tit if en24(i)]
         base = POL_BASE.get(pid, set()); b24 = sum(1 for i in base if en24(i)); v48 = [i for i in base if en48(i)]
         fu = collections.Counter(ITEMS[i][1] for i in t24)

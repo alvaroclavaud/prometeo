@@ -4,10 +4,10 @@ on:
   schedule:
     # GitHub trabaja en hora UTC y no entiende de horario de verano. Por eso se despierta varias veces
     # y el paso «Turno» decide con la hora de España (todo el año igual):
-    #   6:12, 12:12 y 18:12            → recogida normal
-    #   una y dos horas después        → nuevo intento, solo si el turno anterior no llegó a publicar
+    #   6:12, 12:12, 18:12 y 23:12     → recogida normal (la de las 23:12 cierra las cifras del día)
+    #   una y dos horas después        → nuevo intento, solo si el turno de la mañana, mediodía o tarde no llegó a publicar
     #   resto de despertares           → no hace nada (dura unos segundos)
-    - cron: '12 4-7,10-13,16-19 * * *'
+    - cron: '12 4-7,10-13,16-19,21,22 * * *'
   workflow_dispatch:
     inputs:
       reclasificar:
@@ -39,7 +39,7 @@ jobs:
           ahora = datetime.now(timezone.utc); hora = ahora.astimezone(ZoneInfo('Europe/Madrid')).hour
           try: horas = (ahora - datetime.fromisoformat(json.load(open('data/estado.json'))['generado'].replace('Z', '+00:00'))).total_seconds() / 3600
           except Exception: horas = 999
-          toca = (hora in (6, 12, 18) and horas > 2) or (hora in (7, 8, 13, 14, 19, 20) and horas > 3)
+          toca = (hora in (6, 12, 18, 23) and horas > 2) or (hora in (7, 8, 13, 14, 19, 20) and horas > 3)
           print('Hora en España: %d h · última recogida publicada hace %.1f h · %s' % (hora, horas, 'se recoge' if toca else 'no toca, se salta'))
           if not toca: open(os.environ['GITHUB_OUTPUT'], 'a').write('saltar=1\n')
           EOF
