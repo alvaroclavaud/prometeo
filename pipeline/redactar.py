@@ -118,26 +118,28 @@ def modelos():
     r = requests.get(BASE + 'models?pageSize=200', headers={'x-goog-api-key': KEY}, timeout=30); r.raise_for_status()
     ms = [m['name'] for m in r.json().get('models', []) if 'generateContent' in m.get('supportedGenerationMethods', []) and 'flash' in m['name']
           and not re.search(r'image|tts|audio|live|embed|native|robot|computer|preview|exp', m['name'])]
-    pref = sorted([m for m in ms if 'lite' not in m and m.endswith('latest')], reverse=True) + sorted([m for m in ms if 'lite' not in m and not m.endswith('latest')], reverse=True) \
-         + sorted([m for m in ms if 'lite' in m], reverse=True)
+    # primero el que ya funciona con esta clave para clasificar (flash-lite); después los demás
+    pref = sorted([m for m in ms if 'lite' in m and m.endswith('latest')], reverse=True) + sorted([m for m in ms if 'lite' not in m and m.endswith('latest')], reverse=True) \
+         + sorted([m for m in ms if 'lite' not in m and not m.endswith('latest')], reverse=True) + sorted([m for m in ms if 'lite' in m and not m.endswith('latest')], reverse=True)
     return pref[:6]
 
 def pedir(modelo, texto):
+    ultimo = 'sin respuesta'
     for intento in range(3):
         if time.time() - T0 > MAX_S: raise RuntimeError('sin tiempo')
         try:
             r = requests.post(BASE + modelo + ':generateContent', headers={'x-goog-api-key': KEY}, timeout=120,
                               json={'contents': [{'parts': [{'text': texto}]}], 'generationConfig': {'temperature': 0.2, 'responseMimeType': 'application/json', 'responseSchema': ESQUEMA}})
-        except requests.RequestException: time.sleep(10); continue
+        except requests.RequestException as e: ultimo = type(e).__name__; time.sleep(10); continue
         if r.status_code == 429:                       # cuota: se pasa enseguida al siguiente modelo
             try: e = r.json().get('error', {}); raise RuntimeError('cuota agotada: %s' % (e.get('message') or '')[:120])
             except ValueError: raise RuntimeError('cuota agotada')
-        if r.status_code in (500, 503): time.sleep(10 * (intento + 1)); continue
+        if r.status_code in (500, 503): ultimo = 'HTTP %d' % r.status_code; time.sleep(10 * (intento + 1)); continue
         if r.status_code != 200: raise RuntimeError('HTTP %d %s' % (r.status_code, r.text[:160]))
         c = r.json().get('candidates') or []
         if not c: raise RuntimeError('respuesta vacía')
         return json.loads(''.join(p.get('text', '') for p in c[0].get('content', {}).get('parts', [])))
-    raise RuntimeError('sin respuesta')
+    raise RuntimeError(ultimo + ' tras 3 intentos')
 
 def completar(inf, auto, n1, tids):
     """Forma mínima garantizada: si falta una persona o un tema, se usa el texto del informe automático."""
