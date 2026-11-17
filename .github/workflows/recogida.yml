@@ -2,12 +2,13 @@ name: Recogida de Prometeo
 
 on:
   schedule:
-    # GitHub trabaja en hora UTC y no entiende de horario de verano. Por eso se despierta varias veces
-    # y el paso «Turno» decide con la hora de España (todo el año igual):
-    #   6:12, 12:12, 18:12 y 23:12     → recogida normal (la de las 23:12 cierra las cifras del día)
-    #   una y dos horas después        → nuevo intento, solo si el turno de la mañana, mediodía o tarde no llegó a publicar
-    #   resto de despertares           → no hace nada (dura unos segundos)
-    - cron: '12 4-7,10-13,16-19,21,22 * * *'
+    # Los turnos de recogida son a las 6:12, 12:12, 18:12 y 23:12, hora de España, todo el año (la de las 23:12
+    # cierra las cifras del día). GitHub trabaja en hora UTC y su programador puede retrasarse horas, así que el
+    # flujo se despierta cada hora (y cada media hora de madrugada) y el paso «Turno» decide: si los datos
+    # publicados son anteriores al último turno previsto, recoge; si están al día, termina en unos segundos.
+    # Así un despertar que llega tarde, o un turno que falló, se recupera solo en el siguiente despertar.
+    - cron: '12 * * * *'
+    - cron: '42 3-6 * * *'
   workflow_dispatch:
     inputs:
       reclasificar:
@@ -34,21 +35,24 @@ jobs:
         run: |
           python3 - <<'EOF'
           import calendar, json, os
-          from datetime import datetime, timezone
+          from datetime import datetime, timedelta, timezone
           ahora = datetime.now(timezone.utc)
           try:
               from zoneinfo import ZoneInfo
-              hora = ahora.astimezone(ZoneInfo('Europe/Madrid')).hour
+              desfase = ahora.astimezone(ZoneInfo('Europe/Madrid')).utcoffset()
           except Exception:                      # sin base de zonas horarias: regla europea del horario de verano
               def cambio(mes):
                   d = calendar.monthrange(ahora.year, mes)[1]
                   while datetime(ahora.year, mes, d).weekday() != 6: d -= 1
                   return datetime(ahora.year, mes, d, 1, tzinfo=timezone.utc)
-              hora = (ahora.hour + (2 if cambio(3) <= ahora < cambio(10) else 1)) % 24
-          try: horas = (ahora - datetime.fromisoformat(json.load(open('data/estado.json'))['generado'].replace('Z', '+00:00'))).total_seconds() / 3600
-          except Exception: horas = 999
-          toca = (hora in (6, 12, 18, 23) and horas > 2) or (hora in (7, 8, 13, 14, 19, 20) and horas > 3)
-          print('Hora en España: %d h · última recogida publicada hace %.1f h · %s' % (hora, horas, 'se recoge' if toca else 'no toca, se salta'))
+              desfase = timedelta(hours=2 if cambio(3) <= ahora < cambio(10) else 1)
+          local = ahora + desfase                # reloj de pared en España
+          turnos = [(local - timedelta(days=d)).replace(hour=h, minute=12, second=0, microsecond=0) for d in (0, 1) for h in (6, 12, 18, 23)]
+          ultimo = max(t for t in turnos if t <= local)       # último turno que ya debería estar hecho
+          try: gen = datetime.fromisoformat(json.load(open('data/estado.json'))['generado'].replace('Z', '+00:00')) + desfase
+          except Exception: gen = None
+          toca = gen is None or gen < ultimo - timedelta(minutes=45)
+          print('Hora en España: %s · último turno previsto: %s · última recogida publicada: %s · %s' % (local.strftime('%H:%M'), ultimo.strftime('%d-%m %H:%M'), gen.strftime('%d-%m %H:%M') if gen else 'ninguna', 'se recoge' if toca else 'al día, se salta'))
           if not toca: open(os.environ['GITHUB_OUTPUT'], 'a').write('saltar=1\n')
           EOF
       - uses: actions/setup-python@v5
