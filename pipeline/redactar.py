@@ -120,7 +120,7 @@ def modelos():
           and not re.search(r'image|tts|audio|live|embed|native|robot|computer|preview|exp', m['name'])]
     pref = sorted([m for m in ms if 'lite' not in m and m.endswith('latest')], reverse=True) + sorted([m for m in ms if 'lite' not in m and not m.endswith('latest')], reverse=True) \
          + sorted([m for m in ms if 'lite' in m], reverse=True)
-    return pref[:4]
+    return pref[:6]
 
 def pedir(modelo, texto):
     for intento in range(3):
@@ -129,7 +129,10 @@ def pedir(modelo, texto):
             r = requests.post(BASE + modelo + ':generateContent', headers={'x-goog-api-key': KEY}, timeout=120,
                               json={'contents': [{'parts': [{'text': texto}]}], 'generationConfig': {'temperature': 0.2, 'responseMimeType': 'application/json', 'responseSchema': ESQUEMA}})
         except requests.RequestException: time.sleep(10); continue
-        if r.status_code in (429, 500, 503): time.sleep(15 * (intento + 1)); continue
+        if r.status_code == 429:                       # cuota: se pasa enseguida al siguiente modelo
+            try: e = r.json().get('error', {}); raise RuntimeError('cuota agotada: %s' % (e.get('message') or '')[:120])
+            except ValueError: raise RuntimeError('cuota agotada')
+        if r.status_code in (500, 503): time.sleep(10 * (intento + 1)); continue
         if r.status_code != 200: raise RuntimeError('HTTP %d %s' % (r.status_code, r.text[:160]))
         c = r.json().get('candidates') or []
         if not c: raise RuntimeError('respuesta vacía')

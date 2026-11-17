@@ -915,125 +915,153 @@
  "youtube": [
   {
    "nombre": "PSOE",
+   "id": "UCB75fTm3weGTmtnitiZcdBw",
    "handle": "PSOE",
+   "clave": "UCB75fTm3weGTmtnitiZcdBw",
    "tipo": "partido",
    "partido": "PSOE"
   },
   {
    "nombre": "Partido Popular",
+   "id": "UCPECDsPyGRW5b5E4ibCGhww",
    "handle": "partidopopular",
+   "clave": "UCPECDsPyGRW5b5E4ibCGhww",
    "tipo": "partido",
    "partido": "PP"
   },
   {
    "nombre": "VOX",
-   "handle": "vox_es",
+   "id": "UCRvpumrJs0qY1xLzeU0Ss1Q",
+   "handle": "",
+   "clave": "UCRvpumrJs0qY1xLzeU0Ss1Q",
    "tipo": "partido",
    "partido": "Vox"
   },
   {
-   "nombre": "Sumar",
-   "handle": "sumar",
+   "nombre": "Frente Amplio",
+   "id": "UCI0ufdFaYZQKBH7ixcWtbsg",
+   "handle": "FrenteAmplioYa",
+   "clave": "UCI0ufdFaYZQKBH7ixcWtbsg",
    "tipo": "partido",
-   "partido": "Sumar"
+   "partido": "Frente Amplio"
   },
   {
    "nombre": "Podemos",
-   "handle": "PODEMOS",
+   "id": "UCtK7s89RJ9X9Nv9EQCMu9Lg",
+   "handle": "ahora_podemos",
+   "clave": "UCtK7s89RJ9X9Nv9EQCMu9Lg",
    "tipo": "partido",
    "partido": "Podemos"
   },
   {
    "nombre": "ERC",
-   "handle": "esquerra_erc",
+   "id": "UCUGFRov7dosDlOfaOSU1UYQ",
+   "handle": "EsquerraTV",
+   "clave": "UCUGFRov7dosDlOfaOSU1UYQ",
    "tipo": "partido",
    "partido": "ERC"
   },
   {
    "nombre": "Junts",
-   "handle": "junts",
+   "id": "UCG6dZxszooC9hpNRr1-LlJw",
+   "handle": "JuntsperCatalunya",
+   "clave": "UCG6dZxszooC9hpNRr1-LlJw",
    "tipo": "partido",
    "partido": "Junts"
   },
   {
    "nombre": "EAJ-PNV",
-   "handle": "eajpnv",
+   "id": "UCMv59ay_eYWNTNPLpFJSBYw",
+   "handle": "eaj-pnv",
+   "clave": "UCMv59ay_eYWNTNPLpFJSBYw",
    "tipo": "partido",
    "partido": "PNV"
   },
   {
    "nombre": "EH Bildu",
-   "handle": "ehbildu",
+   "id": "UCbL7d4Gubav2tnardHApS7Q",
+   "handle": "EuskalHerriaBildu",
+   "clave": "UCbL7d4Gubav2tnardHApS7Q",
    "tipo": "partido",
    "partido": "EH Bildu"
   },
   {
    "nombre": "La Moncloa",
+   "id": "UCzJtDQ9b_Uq1tA5W_tMiMUQ",
    "handle": "LaMoncloa",
+   "clave": "UCzJtDQ9b_Uq1tA5W_tMiMUQ",
    "tipo": "institucion",
    "partido": ""
   },
   {
-   "nombre": "Congreso de los Diputados",
-   "handle": "CongresodelosDiputados",
+   "nombre": "Congreso (Canal Parlamento)",
+   "id": "UCT3tvU3bVxOa3ZiVD-B7h9g",
+   "handle": "CanalParlamento-Congreso_Es",
+   "clave": "UCT3tvU3bVxOa3ZiVD-B7h9g",
    "tipo": "institucion",
    "partido": ""
   },
   {
    "nombre": "RTVE Noticias",
+   "id": "UC7QZIf0dta-XPXsp9Hv4dTw",
    "handle": "rtvenoticias",
+   "clave": "UC7QZIf0dta-XPXsp9Hv4dTw",
    "tipo": "medio",
    "partido": ""
   },
   {
    "nombre": "laSexta",
+   "id": "UCh1OgMIWOlDBhFEYL3DHWjQ",
    "handle": "laSexta",
+   "clave": "UCh1OgMIWOlDBhFEYL3DHWjQ",
    "tipo": "medio",
    "partido": ""
   },
   {
    "nombre": "Antena 3 Noticias",
+   "id": "UC_Oni82GyYcabEr3rd-eJkg",
    "handle": "antena3noticias",
+   "clave": "UC_Oni82GyYcabEr3rd-eJkg",
    "tipo": "medio",
    "partido": ""
   },
   {
    "nombre": "EL PAÍS",
+   "id": "UCnsvJeZO4RigQ898WdDNoBw",
    "handle": "elpais",
+   "clave": "UCnsvJeZO4RigQ898WdDNoBw",
    "tipo": "medio",
    "partido": ""
   },
   {
    "nombre": "El Mundo",
+   "id": "UCGXbLrVe8vnkiFv7q2vYv3w",
    "handle": "elmundo",
+   "clave": "UCGXbLrVe8vnkiFv7q2vYv3w",
    "tipo": "medio",
    "partido": ""
   },
   {
-   "nombre": "El Español",
-   "handle": "elespanol",
+   "nombre": "EL ESPAÑOL",
+   "id": "UCIvqcSPbzQBynjq230v9_yw",
+   "handle": "ElEspanolcom",
+   "clave": "UCIvqcSPbzQBynjq230v9_yw",
    "tipo": "medio",
    "partido": ""
   }
  ],
  "telegram": [
   {
-   "nombre": "VOX",
-   "canal": "vox_es",
-   "tipo": "partido",
-   "partido": "Vox"
-  },
-  {
-   "nombre": "PSOE",
-   "canal": "psoe",
-   "tipo": "partido",
-   "partido": "PSOE"
-  },
-  {
    "nombre": "Partido Popular",
-   "canal": "partidopopular",
+   "canal": "partido_popular",
    "tipo": "partido",
    "partido": "PP"
+  },
+  {
+   "nombre": "Sumar",
+   "canal": "sumar_oficial",
+   "tipo": "partido",
+   "partido": "Sumar"
   },
   {
    "nombre": "Podemos",
@@ -1042,38 +1070,26 @@
    "partido": "Podemos"
   },
   {
-   "nombre": "Sumar",
-   "canal": "sumar",
-   "tipo": "partido",
-   "partido": "Sumar"
-  },
-  {
-   "nombre": "Santiago Abascal",
-   "canal": "Santi_ABASCAL",
-   "tipo": "persona",
-   "partido": "Vox"
-  },
-  {
    "nombre": "Alvise Pérez",
-   "canal": "alvisepf",
+   "canal": "AlvisePerez",
    "tipo": "persona",
+   "partido": "SALF"
+  },
+  {
+   "nombre": "eldiario.es",
+   "canal": "eldiarioes",
+   "tipo": "medio",
+   "partido": ""
+  },
+  {
+   "nombre": "Público",
+   "canal": "publico_es",
+   "tipo": "medio",
    "partido": ""
   },
   {
    "nombre": "EL PAÍS",
    "canal": "elpais",
-   "tipo": "medio",
-   "partido": ""
-  },
-  {
-   "nombre": "El Mundo",
-   "canal": "elmundoes",
-   "tipo": "medio",
-   "partido": ""
-  },
-  {
-   "nombre": "RTVE Noticias",
-   "canal": "rtvenoticias",
    "tipo": "medio",
    "partido": ""
   },
@@ -1085,7 +1101,13 @@
   },
   {
    "nombre": "Europa Press",
-   "canal": "europapress",
+   "canal": "europa_press",
+   "tipo": "medio",
+   "partido": ""
+  },
+  {
+   "nombre": "Libertad Digital",
+   "canal": "libertaddigital",
    "tipo": "medio",
    "partido": ""
   }

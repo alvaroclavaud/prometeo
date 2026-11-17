@@ -85,12 +85,19 @@ def validar(d):
     for p in out: d['partidos'].setdefault(p['partido'], '#8a8f98')
     el = d.get('elecciones') or {}
     d['elecciones'] = {'nombre': str(el.get('nombre') or ''), 'fecha': str(el.get('fecha') or ''), 'inicio_campana': str(el.get('inicio_campana') or '')}
-    for red, campo in (('youtube', 'handle'), ('telegram', 'canal')):
-        l = []
-        for c in d.get(red) or []:
-            if isinstance(c, dict) and c.get(campo):
-                l.append({'nombre': str(c.get('nombre') or c[campo]), campo: str(c[campo]).lstrip('@').strip(), 'tipo': str(c.get('tipo') or 'otro'), 'partido': str(c.get('partido') or '')})
-        d[red] = l
+    yt = []
+    for c in d.get('youtube') or []:
+        if isinstance(c, dict) and (c.get('id') or c.get('handle')):
+            i = str(c.get('id') or '').strip(); h = str(c.get('handle') or '').lstrip('@').strip()
+            if i and not re.fullmatch(r'UC[0-9A-Za-z_-]{22}', i): raise Malo('el id de YouTube «%s» no es válido (empieza por UC y tiene 24 caracteres)' % i)
+            yt.append({'nombre': str(c.get('nombre') or h or i), 'id': i, 'handle': h, 'clave': i or h, 'tipo': str(c.get('tipo') or 'otro'), 'partido': str(c.get('partido') or '')})
+    d['youtube'] = yt
+    tg = []
+    for c in d.get('telegram') or []:
+        if isinstance(c, dict) and c.get('canal'):
+            k = str(c['canal']).lstrip('@').strip().replace('https://t.me/', '').replace('s/', '')
+            tg.append({'nombre': str(c.get('nombre') or k), 'canal': k, 'tipo': str(c.get('tipo') or 'otro'), 'partido': str(c.get('partido') or '')})
+    d['telegram'] = tg
     return d
 
 def aplicar_ajustes(d):
@@ -133,7 +140,8 @@ def cargar():
         linea = ''
         m = getattr(e, 'problem_mark', None)
         if m is not None: linea = ' (línea %d)' % (m.line + 1)
-        AVISO.append('seguimiento.yml tiene un error%s: %s. Se usa la última versión buena.' % (linea, str(e).split('\n')[0][:160]))
+        txt_e = 'error de formato (revisa la sangría, los guiones y las comillas)' if m is not None or type(e).__module__.startswith('yaml') else str(e).split('\n')[0][:160]
+        AVISO.append('seguimiento.yml tiene un error%s: %s. Se usa la última versión buena.' % (linea, txt_e))
         print('AVISO:', AVISO[-1])
         try: d = validar(json.load(open(BUENA, encoding='utf-8')))
         except Exception: raise SystemExit('No hay ninguna versión buena de seguimiento.yml: no se puede recoger.')

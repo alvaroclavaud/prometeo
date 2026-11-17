@@ -362,11 +362,11 @@ def publicar():
     if RD.get('youtube'):
         cans, todos = [], []
         for c in CAT.get('youtube') or []:
-            r = RD['youtube'].get(c['handle']) or {}
+            r = RD['youtube'].get(c.get('clave') or c.get('handle')) or {}
             vids = [{'t': v[1], 'u': 'https://www.youtube.com/watch?v=' + v[0], 'ts': v[2], 'vistas': v[3], 'mg': v[4], 'canal': c['nombre'], 'tipo': c['tipo']} for v in r.get('v', []) if v[2]]
             v7 = [v for v in vids if v['ts'] >= GEN_MIN - 7 * 1440]; todos += v7
-            cans.append({'nombre': c['nombre'], 'handle': c['handle'], 'tipo': c['tipo'], 'partido': c['partido'], 'ok': 'v' in r, 'error': r.get('error'),
-                         'url': 'https://www.youtube.com/@' + c['handle'], 'n7': len(v7), 'vistas7': sum(v['vistas'] or 0 for v in v7),
+            cans.append({'nombre': c['nombre'], 'handle': c.get('handle'), 'tipo': c['tipo'], 'partido': c['partido'], 'ok': 'v' in r, 'error': r.get('error'),
+                         'url': ('https://www.youtube.com/@' + c['handle']) if c.get('handle') else 'https://www.youtube.com/channel/' + c.get('id', ''), 'n7': len(v7), 'vistas7': sum(v['vistas'] or 0 for v in v7),
                          'top': max(v7, key=lambda v: v['vistas'] or 0) if v7 else None, 'ultimo': vids[0] if vids else None})
         yt = {'canales': cans, 'n1': menc_red(todos), 'top': sorted(todos, key=lambda v: -(v['vistas'] or 0))[:10]}
     tg = None

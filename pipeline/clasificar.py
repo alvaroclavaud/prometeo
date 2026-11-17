@@ -9,7 +9,7 @@ import requests
 W = os.path.dirname(os.path.abspath(__file__))
 KEY = os.environ.get('GEMINI_API_KEY', '').strip()
 BASE = 'https://generativelanguage.googleapis.com/v1beta/'
-LOTE = int(os.environ.get('PROM_LOTE', '30')); ESPERA = float(os.environ.get('PROM_ESPERA', '5'))
+LOTE = int(os.environ.get('PROM_LOTE', '60')); ESPERA = float(os.environ.get('PROM_ESPERA', '5'))
 T0 = time.time(); MAX_MIN = float(os.environ.get('PROM_CLAS_MIN', '16'))          # minutos como máximo dedicados a clasificar
 def queda(): return MAX_MIN * 60 - (time.time() - T0)
 OK = re.compile(r'^([PNU][FCN][IMEBOTX][EVISCLTXAO]|----)$')
@@ -70,6 +70,12 @@ def previas():
         except Exception as e: print('  aviso: no se pudo leer', os.path.basename(fp), repr(e)[:60])
     return out
 
+class Agotado(Exception): pass
+
+def motivo(r):
+    try: e = r.json().get('error', {}); return '%s %s' % (e.get('status', r.status_code), (e.get('message') or '')[:140])
+    except Exception: return '%s %s' % (r.status_code, r.text[:140])
+
 def pedir(modelo, texto):
     for intento in range(3):
         if queda() <= 0: raise RuntimeError('sin tiempo')
@@ -83,9 +89,13 @@ def pedir(modelo, texto):
         if r.status_code == 200:
             try: return json.loads(r.json()['candidates'][0]['content']['parts'][0]['text']).get('r', [])
             except Exception: return []
-        if r.status_code in (429, 500, 503): time.sleep(max(0, min(15 * (intento + 1), queda()))); continue
-        raise RuntimeError('%s %s' % (r.status_code, r.text[:160]))
-    raise RuntimeError('límite de uso del modelo')
+        if r.status_code == 429:
+            m = motivo(r)
+            if re.search(r'per ?day|PerDay|daily', m, re.I) or intento: raise Agotado(m)      # cuota del día agotada: se pasa a otro modelo
+            time.sleep(max(0, min(25, queda()))); continue                                     # límite por minuto: una espera y otro intento
+        if r.status_code in (500, 503): time.sleep(max(0, min(10 * (intento + 1), queda()))); continue
+        raise RuntimeError(motivo(r))
+    raise Agotado('sin respuesta tras 3 intentos')
 
 pedir.esquema = True
 
@@ -102,21 +112,24 @@ def main():
     for n, r in enumerate(filas):
         c = ya.get((r['pid'] if r['tipo'] == 'm' else '_', r['texto'])) if r['tipo'] in ('m', 't') else None
         if c: et[n] = c
-    pend = [n for n in range(len(filas)) if n not in et]
+    n1 = set(seguimiento.config()['n1'])
+    prio = lambda n: (0 if filas[n]['tipo'] == 'm' and filas[n]['pid'] in n1 else 1 if filas[n]['tipo'] == 'm' else 2 if filas[n]['tipo'] == 't' else 3, n)
+    pend = sorted((n for n in range(len(filas)) if n not in et), key=prio)     # primero el nivel 1: si la cuota se acaba, lo importante ya está
     print('Filas: %d · ya clasificadas en recogidas anteriores: %d · nuevas: %d' % (len(filas), len(et), len(pend)), flush=True)
     def guardar():
         with open(sal, 'w') as f:
             for n in sorted(et): f.write('%d %s\n' % (n, et[n]))
-    guardar(); cand = cand[:3]
+    guardar(); vivos = list(cand)
     for a in range(0, len(pend), LOTE):
         if queda() < 45: print('Se acabó el tiempo de clasificación: quedan %d filas sin clasificar.' % (len(pend) - a)); break
         idx = pend[a:a + LOTE]; lote = [filas[n] for n in idx]
         lin = ['%d. [%s] %s — %s' % (i + 1, ('TEMA: ' + r['pid']) if r['tipo'] == 't' else (('BLUESKY sobre ' if r['tipo'] == 'b' else '') + nombres.get(r['pid'], r['pid'])), r['texto'], r['fuente']) for i, r in enumerate(lote)]
         texto = INSTR + '\n\n' + '\n'.join(lin)
         res = None
-        for m in ([modelo] if modelo else cand):
-            try: res = pedir(m, texto); modelo = m; break
-            except Exception as e: print('  modelo', m, 'no disponible:', repr(e)[:100])
+        while vivos and res is None:
+            m = vivos[0]
+            try: res = pedir(m, texto); modelo = m
+            except Exception as e: print('  modelo', m, 'no disponible:', str(e)[:160]); vivos.pop(0)
         if res is None: print('Clasificación interrumpida: quedan %d filas sin clasificar.' % (len(pend) - a)); break
         if len(res) != len(lote): print('  aviso: el modelo devolvió', len(res), 'respuestas para', len(lote), 'filas; se descarta el lote'); res = []
         for i, o in enumerate(res):

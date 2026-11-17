@@ -181,14 +181,12 @@ def youtube():
     H = {'Cookie': 'CONSENT=YES+cb; SOCS=CAI', 'Accept-Language': 'es-ES,es;q=0.9'}
     out = {}
     for c in C.get('yt') or []:
-        h = c['handle']; cid = cache.get('yt:' + h)
+        h = c['clave']; cid = c.get('id') or cache.get('yt:' + h)
         try:
-            if not cid:
-                if h.startswith('UC') and len(h) == 24: cid = h
-                else:
-                    t = S.get('https://www.youtube.com/@' + quote(h), headers=H, timeout=30).text
-                    m = re.search(r'"(?:externalId|channelId)":"(UC[0-9A-Za-z_-]{22})"', t) or re.search(r'youtube\.com/channel/(UC[0-9A-Za-z_-]{22})', t)
-                    cid = m.group(1) if m else None
+            if not cid:                                   # sin id: se busca a partir del handle (solo el del propio canal)
+                t = S.get('https://www.youtube.com/@' + quote(c['handle']), headers=H, timeout=30).text
+                m = re.search(r'"externalId":"(UC[0-9A-Za-z_-]{22})"', t) or re.search(r'<link rel="canonical" href="https://www\.youtube\.com/channel/(UC[0-9A-Za-z_-]{22})"', t)
+                cid = m.group(1) if m else None
                 if cid: cache['yt:' + h] = cid
             if not cid: out[h] = {'error': 'canal no encontrado'}; continue
             x = S.get('https://www.youtube.com/feeds/videos.xml?channel_id=' + cid, headers=H, timeout=30)

@@ -479,38 +479,39 @@ temas:
     mapa: ''
     bluesky: elecciones generales
 
-# YouTube: canales públicos (se leen los últimos vídeos con sus visualizaciones).
-# Basta el «handle» del canal (lo que va tras youtube.com/@). tipo: partido, institucion o medio.
+# YouTube: canales públicos (se leen sus últimos 15 vídeos con visualizaciones y «me gusta»).
+# id: identificador del canal (empieza por UC; aparece en la dirección youtube.com/channel/UC…).
+# handle: el nombre tras youtube.com/@ (solo para el enlace). tipo: partido, institucion o medio.
+# Comprobados el 17-nov-2026: todos activos en la última semana. Sumar publica en el canal de Frente Amplio.
 youtube:
-  - {nombre: PSOE, handle: PSOE, tipo: partido, partido: 'PSOE'}
-  - {nombre: Partido Popular, handle: partidopopular, tipo: partido, partido: 'PP'}
-  - {nombre: VOX, handle: vox_es, tipo: partido, partido: 'Vox'}
-  - {nombre: Sumar, handle: sumar, tipo: partido, partido: 'Sumar'}
-  - {nombre: Podemos, handle: PODEMOS, tipo: partido, partido: 'Podemos'}
-  - {nombre: ERC, handle: esquerra_erc, tipo: partido, partido: 'ERC'}
-  - {nombre: Junts, handle: junts, tipo: partido, partido: 'Junts'}
-  - {nombre: EAJ-PNV, handle: eajpnv, tipo: partido, partido: 'PNV'}
-  - {nombre: EH Bildu, handle: ehbildu, tipo: partido, partido: 'EH Bildu'}
-  - {nombre: La Moncloa, handle: LaMoncloa, tipo: institucion, partido: ''}
-  - {nombre: Congreso de los Diputados, handle: CongresodelosDiputados, tipo: institucion, partido: ''}
-  - {nombre: RTVE Noticias, handle: rtvenoticias, tipo: medio, partido: ''}
-  - {nombre: laSexta, handle: laSexta, tipo: medio, partido: ''}
-  - {nombre: Antena 3 Noticias, handle: antena3noticias, tipo: medio, partido: ''}
-  - {nombre: EL PAÍS, handle: elpais, tipo: medio, partido: ''}
-  - {nombre: El Mundo, handle: elmundo, tipo: medio, partido: ''}
-  - {nombre: El Español, handle: elespanol, tipo: medio, partido: ''}
+  - {nombre: PSOE, id: UCB75fTm3weGTmtnitiZcdBw, handle: 'PSOE', tipo: partido, partido: 'PSOE'}
+  - {nombre: Partido Popular, id: UCPECDsPyGRW5b5E4ibCGhww, handle: 'partidopopular', tipo: partido, partido: 'PP'}
+  - {nombre: VOX, id: UCRvpumrJs0qY1xLzeU0Ss1Q, handle: '', tipo: partido, partido: 'Vox'}
+  - {nombre: Frente Amplio, id: UCI0ufdFaYZQKBH7ixcWtbsg, handle: 'FrenteAmplioYa', tipo: partido, partido: 'Frente Amplio'}
+  - {nombre: Podemos, id: UCtK7s89RJ9X9Nv9EQCMu9Lg, handle: 'ahora_podemos', tipo: partido, partido: 'Podemos'}
+  - {nombre: ERC, id: UCUGFRov7dosDlOfaOSU1UYQ, handle: 'EsquerraTV', tipo: partido, partido: 'ERC'}
+  - {nombre: Junts, id: UCG6dZxszooC9hpNRr1-LlJw, handle: 'JuntsperCatalunya', tipo: partido, partido: 'Junts'}
+  - {nombre: EAJ-PNV, id: UCMv59ay_eYWNTNPLpFJSBYw, handle: 'eaj-pnv', tipo: partido, partido: 'PNV'}
+  - {nombre: EH Bildu, id: UCbL7d4Gubav2tnardHApS7Q, handle: 'EuskalHerriaBildu', tipo: partido, partido: 'EH Bildu'}
+  - {nombre: La Moncloa, id: UCzJtDQ9b_Uq1tA5W_tMiMUQ, handle: 'LaMoncloa', tipo: institucion, partido: ''}
+  - {nombre: 'Congreso (Canal Parlamento)', id: UCT3tvU3bVxOa3ZiVD-B7h9g, handle: 'CanalParlamento-Congreso_Es', tipo: institucion, partido: ''}
+  - {nombre: RTVE Noticias, id: UC7QZIf0dta-XPXsp9Hv4dTw, handle: 'rtvenoticias', tipo: medio, partido: ''}
+  - {nombre: laSexta, id: UCh1OgMIWOlDBhFEYL3DHWjQ, handle: 'laSexta', tipo: medio, partido: ''}
+  - {nombre: Antena 3 Noticias, id: UC_Oni82GyYcabEr3rd-eJkg, handle: 'antena3noticias', tipo: medio, partido: ''}
+  - {nombre: EL PAÍS, id: UCnsvJeZO4RigQ898WdDNoBw, handle: 'elpais', tipo: medio, partido: ''}
+  - {nombre: El Mundo, id: UCGXbLrVe8vnkiFv7q2vYv3w, handle: 'elmundo', tipo: medio, partido: ''}
+  - {nombre: EL ESPAÑOL, id: UCIvqcSPbzQBynjq230v9_yw, handle: 'ElEspanolcom', tipo: medio, partido: ''}
 
-# Telegram: canales públicos (se leen los últimos mensajes con sus visualizaciones desde t.me/s/<canal>).
+# Telegram: canales públicos (se leen sus últimos mensajes y visualizaciones desde t.me/s/<canal>).
+# Comprobados el 17-nov-2026. VOX, PSOE y RTVE no tienen un canal público oficial legible; el del PP publica poco.
 telegram:
-  - {nombre: VOX, canal: vox_es, tipo: partido, partido: 'Vox'}
-  - {nombre: PSOE, canal: psoe, tipo: partido, partido: 'PSOE'}
-  - {nombre: Partido Popular, canal: partidopopular, tipo: partido, partido: 'PP'}
+  - {nombre: Partido Popular, canal: partido_popular, tipo: partido, partido: 'PP'}
+  - {nombre: Sumar, canal: sumar_oficial, tipo: partido, partido: 'Sumar'}
   - {nombre: Podemos, canal: ahorapodemos, tipo: partido, partido: 'Podemos'}
-  - {nombre: Sumar, canal: sumar, tipo: partido, partido: 'Sumar'}
-  - {nombre: Santiago Abascal, canal: Santi_ABASCAL, tipo: persona, partido: 'Vox'}
-  - {nombre: Alvise Pérez, canal: alvisepf, tipo: persona, partido: ''}
+  - {nombre: Alvise Pérez, canal: AlvisePerez, tipo: persona, partido: 'SALF'}
+  - {nombre: eldiario.es, canal: eldiarioes, tipo: medio, partido: ''}
+  - {nombre: Público, canal: publico_es, tipo: medio, partido: ''}
   - {nombre: EL PAÍS, canal: elpais, tipo: medio, partido: ''}
-  - {nombre: El Mundo, canal: elmundoes, tipo: medio, partido: ''}
-  - {nombre: RTVE Noticias, canal: rtvenoticias, tipo: medio, partido: ''}
   - {nombre: El Confidencial, canal: elconfidencial, tipo: medio, partido: ''}
-  - {nombre: Europa Press, canal: europapress, tipo: medio, partido: ''}
+  - {nombre: Europa Press, canal: europa_press, tipo: medio, partido: ''}
+  - {nombre: Libertad Digital, canal: libertaddigital, tipo: medio, partido: ''}
