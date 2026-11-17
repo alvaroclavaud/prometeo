@@ -23,7 +23,7 @@ social a partir EXCLUSIVAMENTE de los datos JSON que siguen. Reglas obligatorias
 4. No añadas hechos, declaraciones, cargos ni contexto que no estén en los datos. Si un dato falta, no lo menciones.
 5. Bluesky es una red pequeña y escorada a la izquierda en España; YouTube y Telegram son canales propios de
    partidos y medios: descríbelos como difusión, no como opinión.
-6. Español de España, frases cortas. titular: máximo 140 caracteres. claves: entre 4 y 6, cada una con un título
+6. Español de España, frases cortas. titular: máximo 140 caracteres; resume el dato más relevante del día (quién o qué destaca y con qué cifra), nunca un título genérico. claves: entre 4 y 6, cada una con un título
    breve (t) y 1-3 frases (d). lideres: un párrafo de 2-4 frases por cada persona de nivel1, con su id.
    temas: 1-2 frases por cada tema, con su id. redes: 2-3 frases. vigilar: 3-5 puntos a partir de las alertas.
 DATOS:
