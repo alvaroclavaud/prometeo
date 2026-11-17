@@ -1,0 +1,1093 @@
+{
+ "elecciones": {
+  "nombre": "Elecciones generales 29-N",
+  "fecha": "2026-11-29",
+  "inicio_campana": "2026-11-13"
+ },
+ "nivel1": [
+  "sanchez",
+  "feijoo",
+  "abascal",
+  "colau"
+ ],
+ "partidos": {
+  "PSOE": "#d9342b",
+  "PSC": "#d9342b",
+  "PP": "#1f6fc4",
+  "Vox": "#5aa81d",
+  "Sumar": "#d6246e",
+  "Más Madrid": "#16a891",
+  "Podemos": "#7a52b8",
+  "Junts": "#12a39a",
+  "ERC": "#e29a12",
+  "PNV": "#1f7a45",
+  "EH Bildu": "#8fae1b",
+  "CC": "#c9a400",
+  "Frente Amplio": "#b5179e"
+ },
+ "personas": [
+  {
+   "id": "sanchez",
+   "nombre": "Pedro Sánchez",
+   "partido": "PSOE",
+   "ambito": "Gobierno",
+   "cargo": "Presidente del Gobierno y candidato del PSOE",
+   "territorio": "España",
+   "alias": [
+    "Pedro Sánchez",
+    "Sánchez"
+   ],
+   "bluesky": "\"Pedro Sánchez\"",
+   "consulta": "\"Pedro Sánchez\"",
+   "wiki": "Pedro Sánchez"
+  },
+  {
+   "id": "feijoo",
+   "nombre": "Alberto Núñez Feijóo",
+   "partido": "PP",
+   "ambito": "Oposición",
+   "cargo": "Presidente del PP y candidato",
+   "territorio": "España",
+   "alias": [
+    "Feijóo",
+    "Feijoo"
+   ],
+   "consulta": "\"Feijóo\"",
+   "wiki": "Alberto Núñez Feijóo",
+   "bluesky": "Feijóo"
+  },
+  {
+   "id": "abascal",
+   "nombre": "Santiago Abascal",
+   "partido": "Vox",
+   "ambito": "Oposición",
+   "cargo": "Presidente de Vox y candidato",
+   "territorio": "España",
+   "alias": [
+    "Abascal"
+   ],
+   "consulta": "\"Abascal\"",
+   "wiki": "Santiago Abascal",
+   "bluesky": "Abascal"
+  },
+  {
+   "id": "colau",
+   "nombre": "Ada Colau",
+   "partido": "Frente Amplio",
+   "ambito": "Oposición",
+   "cargo": "Candidata de Frente Amplio a la Presidencia del Gobierno",
+   "territorio": "España",
+   "alias": [
+    "Ada Colau",
+    "Colau"
+   ],
+   "bluesky": "Colau",
+   "consulta": "\"Ada Colau\"",
+   "wiki": "Ada Colau"
+  },
+  {
+   "id": "cuerpo",
+   "nombre": "Carlos Cuerpo",
+   "partido": "PSOE",
+   "ambito": "Gobierno",
+   "cargo": "Ministro de Economía, Comercio y Empresa",
+   "territorio": "España",
+   "alias": [
+    "Carlos Cuerpo",
+    "Cuerpo"
+   ],
+   "consulta": "\"Carlos Cuerpo\"",
+   "wiki": "Carlos Cuerpo",
+   "bluesky": "Carlos Cuerpo"
+  },
+  {
+   "id": "diaz",
+   "nombre": "Yolanda Díaz",
+   "partido": "Sumar",
+   "ambito": "Gobierno",
+   "cargo": "Vicepresidenta segunda y ministra de Trabajo",
+   "territorio": "España",
+   "alias": [
+    "Yolanda Díaz"
+   ],
+   "consulta": "\"Yolanda Díaz\"",
+   "wiki": "Yolanda Díaz",
+   "bluesky": "Yolanda Díaz"
+  },
+  {
+   "id": "aagesen",
+   "nombre": "Sara Aagesen",
+   "partido": "PSOE",
+   "ambito": "Gobierno",
+   "cargo": "Vicepresidenta tercera y ministra para la Transición Ecológica",
+   "territorio": "España",
+   "alias": [
+    "Aagesen"
+   ],
+   "consulta": "\"Sara Aagesen\"",
+   "wiki": "Sara Aagesen",
+   "bluesky": "Aagesen"
+  },
+  {
+   "id": "bolanos",
+   "nombre": "Félix Bolaños",
+   "partido": "PSOE",
+   "ambito": "Gobierno",
+   "cargo": "Ministro de la Presidencia y Justicia",
+   "territorio": "España",
+   "alias": [
+    "Bolaños"
+   ],
+   "consulta": "\"Félix Bolaños\"",
+   "wiki": "Félix Bolaños",
+   "bluesky": "Bolaños"
+  },
+  {
+   "id": "espana",
+   "nombre": "Arcadi España",
+   "partido": "PSOE",
+   "ambito": "Gobierno",
+   "cargo": "Ministro de Hacienda",
+   "territorio": "España",
+   "alias": [
+    "Arcadi España"
+   ],
+   "consulta": "\"Arcadi España\"",
+   "wiki": "Arcadi España",
+   "bluesky": "Arcadi España"
+  },
+  {
+   "id": "albares",
+   "nombre": "José Manuel Albares",
+   "partido": "PSOE",
+   "ambito": "Gobierno",
+   "cargo": "Ministro de Asuntos Exteriores",
+   "territorio": "España",
+   "alias": [
+    "Albares"
+   ],
+   "consulta": "\"Albares\"",
+   "wiki": "José Manuel Albares",
+   "bluesky": "Albares"
+  },
+  {
+   "id": "robles",
+   "nombre": "Margarita Robles",
+   "partido": "PSOE",
+   "ambito": "Gobierno",
+   "cargo": "Ministra de Defensa",
+   "territorio": "España",
+   "alias": [
+    "Margarita Robles",
+    "Robles"
+   ],
+   "consulta": "\"Margarita Robles\"",
+   "wiki": "Margarita Robles",
+   "bluesky": "Margarita Robles"
+  },
+  {
+   "id": "marlaska",
+   "nombre": "Fernando Grande-Marlaska",
+   "partido": "PSOE",
+   "ambito": "Gobierno",
+   "cargo": "Ministro del Interior",
+   "territorio": "España",
+   "alias": [
+    "Marlaska"
+   ],
+   "consulta": "\"Marlaska\"",
+   "wiki": "Fernando Grande-Marlaska",
+   "bluesky": "Marlaska"
+  },
+  {
+   "id": "puente",
+   "nombre": "Óscar Puente",
+   "partido": "PSOE",
+   "ambito": "Otros",
+   "cargo": "Exministro de Transportes",
+   "territorio": "España",
+   "alias": [
+    "Óscar Puente",
+    "Puente"
+   ],
+   "consulta": "\"Óscar Puente\"",
+   "wiki": "Óscar Puente",
+   "bluesky": "Óscar Puente"
+  },
+  {
+   "id": "garcia",
+   "nombre": "Mónica García",
+   "partido": "Más Madrid",
+   "ambito": "Gobierno",
+   "cargo": "Ministra de Sanidad",
+   "territorio": "España",
+   "alias": [
+    "Mónica García"
+   ],
+   "consulta": "\"Mónica García\" (Sanidad OR ministra OR \"Más Madrid\")",
+   "wiki": "Mónica García Gómez",
+   "bluesky": "Mónica García"
+  },
+  {
+   "id": "cerdan",
+   "nombre": "Santos Cerdán",
+   "partido": "PSOE",
+   "ambito": "Otros",
+   "cargo": "Ex secretario de Organización del PSOE",
+   "territorio": "Navarra",
+   "alias": [
+    "Cerdán"
+   ],
+   "consulta": "\"Santos Cerdán\"",
+   "wiki": "Santos Cerdán",
+   "bluesky": "Cerdán"
+  },
+  {
+   "id": "gamarra",
+   "nombre": "Cuca Gamarra",
+   "partido": "PP",
+   "ambito": "Oposición",
+   "cargo": "Vicesecretaria del PP",
+   "territorio": "España",
+   "alias": [
+    "Gamarra"
+   ],
+   "consulta": "\"Cuca Gamarra\"",
+   "wiki": "Cuca Gamarra",
+   "bluesky": "Gamarra"
+  },
+  {
+   "id": "tellado",
+   "nombre": "Miguel Tellado",
+   "partido": "PP",
+   "ambito": "Oposición",
+   "cargo": "Secretario general del PP",
+   "territorio": "España",
+   "alias": [
+    "Tellado"
+   ],
+   "consulta": "\"Tellado\"",
+   "wiki": "Miguel Tellado",
+   "bluesky": "Tellado"
+  },
+  {
+   "id": "millan",
+   "nombre": "Pepa Millán",
+   "partido": "Vox",
+   "ambito": "Oposición",
+   "cargo": "Portavoz de Vox en el Congreso",
+   "territorio": "España",
+   "alias": [
+    "Pepa Millán",
+    "Millán"
+   ],
+   "consulta": "\"Pepa Millán\"",
+   "wiki": "Pepa Millán",
+   "bluesky": "Pepa Millán"
+  },
+  {
+   "id": "ayuso",
+   "nombre": "Isabel Díaz Ayuso",
+   "partido": "PP",
+   "ambito": "Autonómico",
+   "cargo": "Presidenta de la Comunidad de Madrid",
+   "territorio": "Madrid",
+   "alias": [
+    "Ayuso"
+   ],
+   "consulta": "\"Ayuso\"",
+   "wiki": "Isabel Díaz Ayuso",
+   "bluesky": "Ayuso"
+  },
+  {
+   "id": "moreno",
+   "nombre": "Juan Manuel Moreno Bonilla",
+   "partido": "PP",
+   "ambito": "Autonómico",
+   "cargo": "Presidente de la Junta de Andalucía",
+   "territorio": "Andalucía",
+   "alias": [
+    "Juanma Moreno",
+    "Moreno Bonilla",
+    "Juan Manuel Moreno",
+    "Moreno"
+   ],
+   "consulta": "\"Juanma Moreno\" OR \"Moreno Bonilla\"",
+   "wiki": "Juan Manuel Moreno",
+   "bluesky": "Juanma Moreno"
+  },
+  {
+   "id": "illa",
+   "nombre": "Salvador Illa",
+   "partido": "PSC",
+   "ambito": "Autonómico",
+   "cargo": "President de la Generalitat de Catalunya",
+   "territorio": "Cataluña",
+   "alias": [
+    "Salvador Illa",
+    "Illa"
+   ],
+   "consulta": "\"Salvador Illa\"",
+   "wiki": "Salvador Illa",
+   "bluesky": "Salvador Illa"
+  },
+  {
+   "id": "pradales",
+   "nombre": "Imanol Pradales",
+   "partido": "PNV",
+   "ambito": "Autonómico",
+   "cargo": "Lehendakari",
+   "territorio": "País Vasco",
+   "alias": [
+    "Pradales"
+   ],
+   "consulta": "\"Pradales\"",
+   "wiki": "Imanol Pradales",
+   "bluesky": "Pradales"
+  },
+  {
+   "id": "rueda",
+   "nombre": "Alfonso Rueda",
+   "partido": "PP",
+   "ambito": "Autonómico",
+   "cargo": "Presidente de la Xunta de Galicia",
+   "territorio": "Galicia",
+   "alias": [
+    "Alfonso Rueda",
+    "Rueda"
+   ],
+   "consulta": "\"Alfonso Rueda\"",
+   "wiki": "Alfonso Rueda",
+   "bluesky": "Alfonso Rueda"
+  },
+  {
+   "id": "page",
+   "nombre": "Emiliano García-Page",
+   "partido": "PSOE",
+   "ambito": "Autonómico",
+   "cargo": "Presidente de Castilla-La Mancha",
+   "territorio": "Castilla-La Mancha",
+   "alias": [
+    "García-Page",
+    "Page"
+   ],
+   "consulta": "\"García-Page\"",
+   "wiki": "Emiliano García-Page",
+   "bluesky": "García-Page"
+  },
+  {
+   "id": "mazon",
+   "nombre": "Carlos Mazón",
+   "partido": "PP",
+   "ambito": "Otros",
+   "cargo": "Expresidente de la Generalitat Valenciana",
+   "territorio": "Comunidad Valenciana",
+   "alias": [
+    "Mazón"
+   ],
+   "consulta": "\"Mazón\"",
+   "wiki": "Carlos Mazón",
+   "bluesky": "Mazón"
+  },
+  {
+   "id": "puigdemont",
+   "nombre": "Carles Puigdemont",
+   "partido": "Junts",
+   "ambito": "Otros",
+   "cargo": "Presidente de Junts",
+   "territorio": "Cataluña",
+   "alias": [
+    "Puigdemont"
+   ],
+   "consulta": "\"Puigdemont\"",
+   "wiki": "Carles Puigdemont",
+   "bluesky": "Puigdemont"
+  },
+  {
+   "id": "rufian",
+   "nombre": "Gabriel Rufián",
+   "partido": "ERC",
+   "ambito": "Oposición",
+   "cargo": "Portavoz de ERC en el Congreso",
+   "territorio": "Cataluña",
+   "alias": [
+    "Rufián"
+   ],
+   "consulta": "\"Rufián\"",
+   "wiki": "Gabriel Rufián",
+   "bluesky": "Rufián"
+  },
+  {
+   "id": "nogueras",
+   "nombre": "Míriam Nogueras",
+   "partido": "Junts",
+   "ambito": "Oposición",
+   "cargo": "Portavoz de Junts en el Congreso",
+   "territorio": "Cataluña",
+   "alias": [
+    "Nogueras"
+   ],
+   "consulta": "\"Míriam Nogueras\"",
+   "wiki": "Míriam Nogueras",
+   "bluesky": "Nogueras"
+  },
+  {
+   "id": "otegi",
+   "nombre": "Arnaldo Otegi",
+   "partido": "EH Bildu",
+   "ambito": "Otros",
+   "cargo": "Coordinador general de EH Bildu",
+   "territorio": "País Vasco",
+   "alias": [
+    "Otegi"
+   ],
+   "consulta": "\"Otegi\"",
+   "wiki": "Arnaldo Otegi",
+   "bluesky": "Otegi"
+  },
+  {
+   "id": "esteban",
+   "nombre": "Aitor Esteban",
+   "partido": "PNV",
+   "ambito": "Otros",
+   "cargo": "Presidente del PNV",
+   "territorio": "País Vasco",
+   "alias": [
+    "Aitor Esteban"
+   ],
+   "consulta": "\"Aitor Esteban\"",
+   "wiki": "Aitor Esteban",
+   "bluesky": "Aitor Esteban"
+  },
+  {
+   "id": "belarra",
+   "nombre": "Ione Belarra",
+   "partido": "Podemos",
+   "ambito": "Oposición",
+   "cargo": "Secretaria general de Podemos",
+   "territorio": "España",
+   "alias": [
+    "Belarra"
+   ],
+   "consulta": "\"Belarra\"",
+   "wiki": "Ione Belarra",
+   "bluesky": "Belarra"
+  },
+  {
+   "id": "montero_mj",
+   "nombre": "María Jesús Montero",
+   "partido": "PSOE",
+   "ambito": "Otros",
+   "cargo": "Vicesecretaria general del PSOE y líder del PSOE andaluz",
+   "territorio": "Andalucía",
+   "alias": [
+    "María Jesús Montero",
+    "Montero"
+   ],
+   "consulta": "\"María Jesús Montero\"",
+   "wiki": "María Jesús Montero",
+   "bluesky": "María Jesús Montero"
+  },
+  {
+   "id": "alegria",
+   "nombre": "Pilar Alegría",
+   "partido": "PSOE",
+   "ambito": "Otros",
+   "cargo": "Líder del PSOE de Aragón",
+   "territorio": "Aragón",
+   "alias": [
+    "Pilar Alegría",
+    "Alegría"
+   ],
+   "consulta": "\"Pilar Alegría\"",
+   "wiki": "Pilar Alegría",
+   "bluesky": "Pilar Alegría"
+  },
+  {
+   "id": "urtasun",
+   "nombre": "Ernest Urtasun",
+   "partido": "Sumar",
+   "ambito": "Gobierno",
+   "cargo": "Ministro de Cultura",
+   "territorio": "España",
+   "alias": [
+    "Urtasun"
+   ],
+   "consulta": "\"Urtasun\"",
+   "wiki": "Ernest Urtasun",
+   "bluesky": "Urtasun"
+  },
+  {
+   "id": "saiz",
+   "nombre": "Elma Saiz",
+   "partido": "PSOE",
+   "ambito": "Gobierno",
+   "cargo": "Ministra de Inclusión y portavoz del Gobierno",
+   "territorio": "España",
+   "alias": [
+    "Elma Saiz",
+    "Saiz"
+   ],
+   "consulta": "\"Elma Saiz\"",
+   "wiki": "Elma Saiz",
+   "bluesky": "Elma Saiz"
+  },
+  {
+   "id": "torres",
+   "nombre": "Ángel Víctor Torres",
+   "partido": "PSOE",
+   "ambito": "Gobierno",
+   "cargo": "Ministro de Política Territorial",
+   "territorio": "España",
+   "alias": [
+    "Ángel Víctor Torres",
+    "Torres"
+   ],
+   "consulta": "\"Ángel Víctor Torres\"",
+   "wiki": "Ángel Víctor Torres",
+   "bluesky": "Ángel Víctor Torres"
+  },
+  {
+   "id": "redondo",
+   "nombre": "Ana Redondo",
+   "partido": "PSOE",
+   "ambito": "Gobierno",
+   "cargo": "Ministra de Igualdad",
+   "territorio": "España",
+   "alias": [
+    "Ana Redondo",
+    "Redondo"
+   ],
+   "consulta": "\"Ana Redondo\" (ministra OR Igualdad)",
+   "wiki": "Ana Redondo",
+   "bluesky": "Ana Redondo"
+  },
+  {
+   "id": "semper",
+   "nombre": "Borja Sémper",
+   "partido": "PP",
+   "ambito": "Oposición",
+   "cargo": "Portavoz nacional del PP",
+   "territorio": "España",
+   "alias": [
+    "Sémper"
+   ],
+   "consulta": "\"Sémper\"",
+   "wiki": "Borja Sémper",
+   "bluesky": "Sémper"
+  },
+  {
+   "id": "funez",
+   "nombre": "Carmen Fúnez",
+   "partido": "PP",
+   "ambito": "Oposición",
+   "cargo": "Vicesecretaria del PP",
+   "territorio": "España",
+   "alias": [
+    "Fúnez"
+   ],
+   "consulta": "\"Carmen Fúnez\"",
+   "wiki": "Carmen Fúnez",
+   "bluesky": "Fúnez"
+  },
+  {
+   "id": "bendodo",
+   "nombre": "Elías Bendodo",
+   "partido": "PP",
+   "ambito": "Oposición",
+   "cargo": "Vicesecretario del PP",
+   "territorio": "España",
+   "alias": [
+    "Bendodo"
+   ],
+   "consulta": "\"Bendodo\"",
+   "wiki": "Elías Bendodo",
+   "bluesky": "Bendodo"
+  },
+  {
+   "id": "buxade",
+   "nombre": "Jorge Buxadé",
+   "partido": "Vox",
+   "ambito": "Oposición",
+   "cargo": "Eurodiputado de Vox",
+   "territorio": "España",
+   "alias": [
+    "Buxadé"
+   ],
+   "consulta": "\"Buxadé\"",
+   "wiki": "Jorge Buxadé",
+   "bluesky": "Buxadé"
+  },
+  {
+   "id": "garriga",
+   "nombre": "Ignacio Garriga",
+   "partido": "Vox",
+   "ambito": "Oposición",
+   "cargo": "Secretario general de Vox",
+   "territorio": "España",
+   "alias": [
+    "Garriga"
+   ],
+   "consulta": "\"Ignacio Garriga\"",
+   "wiki": "Ignacio Garriga",
+   "bluesky": "Garriga"
+  },
+  {
+   "id": "almeida",
+   "nombre": "José Luis Martínez-Almeida",
+   "partido": "PP",
+   "ambito": "Local",
+   "cargo": "Alcalde de Madrid",
+   "territorio": "Madrid",
+   "alias": [
+    "Almeida"
+   ],
+   "consulta": "\"Martínez-Almeida\" OR (\"Almeida\" alcalde Madrid)",
+   "wiki": "José Luis Martínez-Almeida",
+   "bluesky": "Almeida"
+  },
+  {
+   "id": "collboni",
+   "nombre": "Jaume Collboni",
+   "partido": "PSC",
+   "ambito": "Local",
+   "cargo": "Alcalde de Barcelona",
+   "territorio": "Cataluña",
+   "alias": [
+    "Collboni"
+   ],
+   "consulta": "\"Collboni\"",
+   "wiki": "Jaume Collboni",
+   "bluesky": "Collboni"
+  },
+  {
+   "id": "guardiola",
+   "nombre": "María Guardiola",
+   "partido": "PP",
+   "ambito": "Autonómico",
+   "cargo": "Presidenta de la Junta de Extremadura",
+   "territorio": "Extremadura",
+   "alias": [
+    "María Guardiola",
+    "Guardiola"
+   ],
+   "consulta": "\"María Guardiola\"",
+   "wiki": "María Guardiola",
+   "bluesky": "María Guardiola"
+  },
+  {
+   "id": "azcon",
+   "nombre": "Jorge Azcón",
+   "partido": "PP",
+   "ambito": "Autonómico",
+   "cargo": "Presidente de Aragón",
+   "territorio": "Aragón",
+   "alias": [
+    "Azcón"
+   ],
+   "consulta": "\"Azcón\"",
+   "wiki": "Jorge Azcón",
+   "bluesky": "Azcón"
+  },
+  {
+   "id": "prohens",
+   "nombre": "Marga Prohens",
+   "partido": "PP",
+   "ambito": "Autonómico",
+   "cargo": "Presidenta de las Illes Balears",
+   "territorio": "Illes Balears",
+   "alias": [
+    "Prohens"
+   ],
+   "consulta": "\"Prohens\"",
+   "wiki": "Marga Prohens",
+   "bluesky": "Prohens"
+  },
+  {
+   "id": "clavijo",
+   "nombre": "Fernando Clavijo",
+   "partido": "CC",
+   "ambito": "Autonómico",
+   "cargo": "Presidente de Canarias",
+   "territorio": "Canarias",
+   "alias": [
+    "Clavijo"
+   ],
+   "consulta": "\"Fernando Clavijo\"",
+   "wiki": "Fernando Clavijo",
+   "bluesky": "Clavijo"
+  },
+  {
+   "id": "aragones",
+   "nombre": "Pere Aragonès",
+   "partido": "ERC",
+   "ambito": "Otros",
+   "cargo": "Expresident de la Generalitat",
+   "territorio": "Cataluña",
+   "alias": [
+    "Aragonès",
+    "Aragonés"
+   ],
+   "consulta": "\"Pere Aragonès\"",
+   "wiki": "Pere Aragonès",
+   "bluesky": "Aragonès"
+  },
+  {
+   "id": "matute",
+   "nombre": "Oskar Matute",
+   "partido": "EH Bildu",
+   "ambito": "Oposición",
+   "cargo": "Portavoz de EH Bildu en Madrid",
+   "territorio": "País Vasco",
+   "alias": [
+    "Matute"
+   ],
+   "consulta": "\"Oskar Matute\"",
+   "wiki": "Oskar Matute",
+   "bluesky": "Matute"
+  },
+  {
+   "id": "montero_i",
+   "nombre": "Irene Montero",
+   "partido": "Podemos",
+   "ambito": "Oposición",
+   "cargo": "Eurodiputada y candidata de Podemos",
+   "territorio": "España",
+   "alias": [
+    "Irene Montero"
+   ],
+   "consulta": "\"Irene Montero\"",
+   "wiki": "Irene Montero",
+   "bluesky": "Irene Montero"
+  }
+ ],
+ "medios": [
+  {
+   "id": "elespanol",
+   "nombre": "El Español",
+   "dominio": "elespanol.com",
+   "tipo": "Prensa"
+  },
+  {
+   "id": "as",
+   "nombre": "Diario AS",
+   "dominio": "as.com",
+   "tipo": "Prensa"
+  },
+  {
+   "id": "elmundo",
+   "nombre": "El Mundo",
+   "dominio": "elmundo.es",
+   "tipo": "Prensa"
+  },
+  {
+   "id": "elpais",
+   "nombre": "El País",
+   "dominio": "elpais.com",
+   "tipo": "Prensa"
+  },
+  {
+   "id": "marca",
+   "nombre": "Marca",
+   "dominio": "marca.com",
+   "tipo": "Prensa"
+  },
+  {
+   "id": "abc",
+   "nombre": "ABC",
+   "dominio": "abc.es",
+   "tipo": "Prensa"
+  },
+  {
+   "id": "elconfidencial",
+   "nombre": "El Confidencial",
+   "dominio": "elconfidencial.com",
+   "tipo": "Prensa"
+  },
+  {
+   "id": "elperiodico",
+   "nombre": "El Periódico",
+   "dominio": "elperiodico.com",
+   "tipo": "Prensa"
+  },
+  {
+   "id": "rtve",
+   "nombre": "RTVE",
+   "dominio": "rtve.es",
+   "tipo": "Radio y TV"
+  },
+  {
+   "id": "okdiario",
+   "nombre": "OKdiario",
+   "dominio": "okdiario.com",
+   "tipo": "Prensa"
+  },
+  {
+   "id": "20minutos",
+   "nombre": "20 Minutos",
+   "dominio": "20minutos.es",
+   "tipo": "Prensa"
+  },
+  {
+   "id": "antena3",
+   "nombre": "Antena 3 Noticias",
+   "dominio": "antena3.com",
+   "tipo": "Radio y TV"
+  },
+  {
+   "id": "ser",
+   "nombre": "Cadena SER",
+   "dominio": "cadenaser.com",
+   "tipo": "Radio y TV"
+  },
+  {
+   "id": "lasexta",
+   "nombre": "La Sexta",
+   "dominio": "lasexta.com",
+   "tipo": "Radio y TV"
+  },
+  {
+   "id": "cope",
+   "nombre": "COPE",
+   "dominio": "cope.es",
+   "tipo": "Radio y TV"
+  },
+  {
+   "id": "telecinco",
+   "nombre": "Telecinco",
+   "dominio": "telecinco.es",
+   "tipo": "Radio y TV"
+  },
+  {
+   "id": "ondacero",
+   "nombre": "Onda Cero",
+   "dominio": "ondacero.es",
+   "tipo": "Radio y TV"
+  }
+ ],
+ "temas": [
+  {
+   "id": "inseguridad",
+   "nombre": "Inseguridad",
+   "consulta": "(inseguridad OR delincuencia OR criminalidad OR robos)",
+   "patron": "insegur|delincuen|criminal|\\brobo|atraco|okupa|narco|apuñal|tiroteo|homicid|asesin|agresi[oó]n|violaci[oó]n|detenid|\\bbanda",
+   "foco": [
+    "Ceuta"
+   ],
+   "mapa": "7d",
+   "bluesky": "inseguridad"
+  },
+  {
+   "id": "economia",
+   "nombre": "Economía",
+   "consulta": "(economía OR empleo OR paro OR vivienda OR inflación)",
+   "patron": "econom|empleo|\\bparo\\b|vivienda|alquiler|inflaci|precio|salario|pension|impuest|hipoteca|\\bPIB\\b|eur[ií]bor|presupuest|huelga",
+   "foco": [
+    "Madrid",
+    "Barcelona"
+   ],
+   "mapa": "2d",
+   "bluesky": "vivienda"
+  },
+  {
+   "id": "inmigracion",
+   "nombre": "Inmigración",
+   "consulta": "(inmigración OR inmigrantes OR migrantes OR pateras OR cayucos)",
+   "patron": "inmigra|migrant|patera|cayuco|menores no acompañados|\\bmenas\\b|frontera|asilo|deportac|regulariza",
+   "foco": [
+    "España"
+   ],
+   "mapa": "7d",
+   "bluesky": "inmigración"
+  },
+  {
+   "id": "campana",
+   "nombre": "Campaña 29-N",
+   "consulta": "(elecciones generales OR \"29-N\" OR campaña electoral OR sondeo)",
+   "patron": "eleccion|29-?N|campaña|sondeo|encuesta|mitin|debate|candidat|\\bvoto|urnas|escaños",
+   "foco": [
+    "España"
+   ],
+   "mapa": "",
+   "bluesky": "elecciones generales"
+  }
+ ],
+ "youtube": [
+  {
+   "nombre": "PSOE",
+   "handle": "PSOE",
+   "tipo": "partido",
+   "partido": "PSOE"
+  },
+  {
+   "nombre": "Partido Popular",
+   "handle": "partidopopular",
+   "tipo": "partido",
+   "partido": "PP"
+  },
+  {
+   "nombre": "VOX",
+   "handle": "vox_es",
+   "tipo": "partido",
+   "partido": "Vox"
+  },
+  {
+   "nombre": "Sumar",
+   "handle": "sumar",
+   "tipo": "partido",
+   "partido": "Sumar"
+  },
+  {
+   "nombre": "Podemos",
+   "handle": "PODEMOS",
+   "tipo": "partido",
+   "partido": "Podemos"
+  },
+  {
+   "nombre": "ERC",
+   "handle": "esquerra_erc",
+   "tipo": "partido",
+   "partido": "ERC"
+  },
+  {
+   "nombre": "Junts",
+   "handle": "junts",
+   "tipo": "partido",
+   "partido": "Junts"
+  },
+  {
+   "nombre": "EAJ-PNV",
+   "handle": "eajpnv",
+   "tipo": "partido",
+   "partido": "PNV"
+  },
+  {
+   "nombre": "EH Bildu",
+   "handle": "ehbildu",
+   "tipo": "partido",
+   "partido": "EH Bildu"
+  },
+  {
+   "nombre": "La Moncloa",
+   "handle": "LaMoncloa",
+   "tipo": "institucion",
+   "partido": ""
+  },
+  {
+   "nombre": "Congreso de los Diputados",
+   "handle": "CongresodelosDiputados",
+   "tipo": "institucion",
+   "partido": ""
+  },
+  {
+   "nombre": "RTVE Noticias",
+   "handle": "rtvenoticias",
+   "tipo": "medio",
+   "partido": ""
+  },
+  {
+   "nombre": "laSexta",
+   "handle": "laSexta",
+   "tipo": "medio",
+   "partido": ""
+  },
+  {
+   "nombre": "Antena 3 Noticias",
+   "handle": "antena3noticias",
+   "tipo": "medio",
+   "partido": ""
+  },
+  {
+   "nombre": "EL PAÍS",
+   "handle": "elpais",
+   "tipo": "medio",
+   "partido": ""
+  },
+  {
+   "nombre": "El Mundo",
+   "handle": "elmundo",
+   "tipo": "medio",
+   "partido": ""
+  },
+  {
+   "nombre": "El Español",
+   "handle": "elespanol",
+   "tipo": "medio",
+   "partido": ""
+  }
+ ],
+ "telegram": [
+  {
+   "nombre": "VOX",
+   "canal": "vox_es",
+   "tipo": "partido",
+   "partido": "Vox"
+  },
+  {
+   "nombre": "PSOE",
+   "canal": "psoe",
+   "tipo": "partido",
+   "partido": "PSOE"
+  },
+  {
+   "nombre": "Partido Popular",
+   "canal": "partidopopular",
+   "tipo": "partido",
+   "partido": "PP"
+  },
+  {
+   "nombre": "Podemos",
+   "canal": "ahorapodemos",
+   "tipo": "partido",
+   "partido": "Podemos"
+  },
+  {
+   "nombre": "Sumar",
+   "canal": "sumar",
+   "tipo": "partido",
+   "partido": "Sumar"
+  },
+  {
+   "nombre": "Santiago Abascal",
+   "canal": "Santi_ABASCAL",
+   "tipo": "persona",
+   "partido": "Vox"
+  },
+  {
+   "nombre": "Alvise Pérez",
+   "canal": "alvisepf",
+   "tipo": "persona",
+   "partido": ""
+  },
+  {
+   "nombre": "EL PAÍS",
+   "canal": "elpais",
+   "tipo": "medio",
+   "partido": ""
+  },
+  {
+   "nombre": "El Mundo",
+   "canal": "elmundoes",
+   "tipo": "medio",
+   "partido": ""
+  },
+  {
+   "nombre": "RTVE Noticias",
+   "canal": "rtvenoticias",
+   "tipo": "medio",
+   "partido": ""
+  },
+  {
+   "nombre": "El Confidencial",
+   "canal": "elconfidencial",
+   "tipo": "medio",
+   "partido": ""
+  },
+  {
+   "nombre": "Europa Press",
+   "canal": "europapress",
+   "tipo": "medio",
+   "partido": ""
+  }
+ ]
+}

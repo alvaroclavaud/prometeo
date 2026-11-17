@@ -3,10 +3,10 @@ name: Recogida de Prometeo
 on:
   schedule:
     # Los turnos de recogida son a las 6:12, 12:12, 18:12 y 23:12, hora de España, todo el año (la de las 23:12
-    # cierra las cifras del día). GitHub trabaja en hora UTC y su programador puede retrasarse horas, así que el
-    # flujo se despierta cada hora (y cada media hora de madrugada) y el paso «Turno» decide: si los datos
-    # publicados son anteriores al último turno previsto, recoge; si están al día, termina en unos segundos.
-    # Así un despertar que llega tarde, o un turno que falló, se recupera solo en el siguiente despertar.
+    # cierra las cifras del día). Quien los lanza a su hora es la tarea programada de Claude «Prometeo · reloj»,
+    # porque el programador de GitHub llega con horas de retraso o no llega. Estos despertares son el respaldo:
+    # el paso «Turno» recoge si los datos publicados son anteriores al último turno previsto y, si están al día,
+    # termina en unos segundos.
     - cron: '12 * * * *'
     - cron: '42 3-6 * * *'
   workflow_dispatch:
@@ -61,7 +61,7 @@ jobs:
           python-version: '3.12'
       - name: Dependencias
         if: steps.turno.outputs.saltar != '1'
-        run: pip install --quiet requests beautifulsoup4 tzdata
+        run: pip install --quiet requests beautifulsoup4 tzdata pyyaml
       - name: Recoger fuentes públicas
         if: steps.turno.outputs.saltar != '1'
         working-directory: pipeline
@@ -83,6 +83,24 @@ jobs:
         if: steps.turno.outputs.saltar != '1'
         working-directory: pipeline
         run: python prom.py publicar --repo --auto-informe
+      - name: Redactar el informe con Gemini (si falla, queda el automático)
+        if: steps.turno.outputs.saltar != '1'
+        working-directory: pipeline
+        continue-on-error: true
+        timeout-minutes: 8
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python redactar.py
+      - name: Comprobar los datos antes de publicar
+        if: steps.turno.outputs.saltar != '1'
+        run: |
+          python3 - <<'EOF'
+          import json, glob
+          for f in glob.glob('data/*.json'): json.load(open(f))
+          u = json.load(open('data/ultimo.json'))
+          assert u['pol'] and u['cobertura']['noticias'] > 0, 'datos vacíos'
+          print('Datos correctos:', u['generado'], '·', u['cobertura']['noticias'], 'noticias ·', len(u['pol']), 'personas')
+          EOF
       - name: Publicar
         if: steps.turno.outputs.saltar != '1'
         run: |
@@ -91,4 +109,5 @@ jobs:
           git add data
           git diff --cached --quiet && echo "Sin cambios" && exit 0
           git commit -m "Recogida $(date -u +%Y-%m-%dT%H:%MZ)"
-          git push || (git pull --rebase origin main && git push)
+          for i in 1 2 3 4; do git push && exit 0; sleep $((i * 5)); git pull --rebase -X theirs origin main || true; done
+          exit 1

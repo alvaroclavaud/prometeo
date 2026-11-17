@@ -165,7 +165,7 @@ STOP = set('de la el en y a los las del que por con para un una al se su sus lo 
 def toks(s): return {w for w in norm(s).split() if len(w) > 2 and w not in STOP}
 def cargar_aux(src):
     best = None
-    for f in sorted(glob.glob('/tmp/claude-tool-results/*/*'), key=os.path.getmtime):
+    for f in ([] if REPO else sorted(glob.glob('/tmp/claude-tool-results/*/*'), key=os.path.getmtime)):   # solo en la recogida antigua por navegador
         try:
             t = json.load(open(f))[0]['text']
             if '"src":"%s"' % src in t[:400]: best = json.loads(t[t.index('---\n') + 4:])
@@ -207,7 +207,7 @@ def publicar():
     def es_es(dom, estricto=True):
         if FUERA.search(dom): return False
         return dom in ES or dom.endswith(('.es', '.cat', '.eus', '.gal')) or not estricto
-    for src in ('provincias', 'provleon'):
+    for src in (() if REPO else ('provincias', 'provleon')):     # repesca de provincias de la recogida antigua por navegador
         aux = cargar_aux(src)
         if aux:
             for k, x in aux['tp'].items():
@@ -347,6 +347,40 @@ def publicar():
             ps, ts = rel_de(x['t'])
             mn.append({'t': x['t'], 'l': x['l'], 'sub': x['sub'], 'votos': x['v'], 'com': x['c'], 'karma': x['k'], 'clics': x['cl'], 'p': ps, 'k': ts})
         mn.sort(key=lambda x: -x['votos'])
+    # ---- YouTube y Telegram ----
+    RD = {}
+    try: RD = json.load(open(os.path.join(W, 'aux_redes.json'), encoding='utf-8'))
+    except Exception: RD = {}
+    n1ids = [i for i in CAT['nivel1'] if i in PID]
+    def menc_red(textos):
+        m = {}
+        for pid in n1ids:
+            l = [x for x in textos if titular(pid, x['t'])]
+            m[pid] = {'n': len(l), 'vistas': sum(x.get('vistas') or 0 for x in l), 'top': sorted(l, key=lambda x: -(x.get('vistas') or 0))[:3]}
+        return m
+    yt = None
+    if RD.get('youtube'):
+        cans, todos = [], []
+        for c in CAT.get('youtube') or []:
+            r = RD['youtube'].get(c['handle']) or {}
+            vids = [{'t': v[1], 'u': 'https://www.youtube.com/watch?v=' + v[0], 'ts': v[2], 'vistas': v[3], 'mg': v[4], 'canal': c['nombre'], 'tipo': c['tipo']} for v in r.get('v', []) if v[2]]
+            v7 = [v for v in vids if v['ts'] >= GEN_MIN - 7 * 1440]; todos += v7
+            cans.append({'nombre': c['nombre'], 'handle': c['handle'], 'tipo': c['tipo'], 'partido': c['partido'], 'ok': 'v' in r, 'error': r.get('error'),
+                         'url': 'https://www.youtube.com/@' + c['handle'], 'n7': len(v7), 'vistas7': sum(v['vistas'] or 0 for v in v7),
+                         'top': max(v7, key=lambda v: v['vistas'] or 0) if v7 else None, 'ultimo': vids[0] if vids else None})
+        yt = {'canales': cans, 'n1': menc_red(todos), 'top': sorted(todos, key=lambda v: -(v['vistas'] or 0))[:10]}
+    tg = None
+    if RD.get('telegram'):
+        cans, todos = [], []
+        for c in CAT.get('telegram') or []:
+            r = RD['telegram'].get(c['canal']) or {}
+            ms = [{'t': m[1], 'u': 'https://t.me/%s/%s' % (c['canal'], m[0]), 'ts': m[2], 'vistas': m[3], 'canal': c['nombre'], 'tipo': c['tipo']} for m in r.get('m', []) if m[2]]
+            m7 = [m for m in ms if m['ts'] >= GEN_MIN - 7 * 1440]; todos += m7
+            vv = [m['vistas'] for m in m7 if m['vistas']]
+            cans.append({'nombre': c['nombre'], 'canal': c['canal'], 'tipo': c['tipo'], 'partido': c['partido'], 'ok': 'm' in r, 'error': r.get('error'), 'subs': r.get('subs'),
+                         'url': 'https://t.me/s/' + c['canal'], 'n7': len(m7), 'vistasMedia': round(sum(vv) / len(vv)) if vv else 0,
+                         'top': max(m7, key=lambda m: m['vistas'] or 0) if m7 else None})
+        tg = {'canales': cans, 'n1': menc_red(todos), 'top': sorted(todos, key=lambda m: -(m['vistas'] or 0))[:10]}
     # ---- alertas ----
     al = []
     def alerta(tipo, sev, titulo, detalle, ref=None): al.append({'id': hashlib.sha1((HOY + tipo + titulo).encode()).hexdigest()[:10], 'tipo': tipo, 'sev': sev, 'titulo': titulo, 'detalle': detalle, 'ref': ref, 'fecha': HOY})
@@ -372,9 +406,10 @@ def publicar():
         if cand2:
             x, k = max(cand2); nom = next(p['nombre'] for p in CAT['provincias'] if p['id'] == k)
             if x >= 1.8: alerta('zona', 2, 'Zona caliente de %s: %s' % (t['nombre'].lower(), nom), '%s%d noticias en %s: %s veces lo esperable para una provincia de su tamaño.' % ('Al menos ' if pv[k]['tope'] else '', pv[k]['n'], t['ventana'], str(x).replace('.', ',')), {'tema': t['id'], 'prov': k})
+    vistos_u = set()
     for k, b in bsky.items():
-        if b['top'] and (b['top'][0]['likes'] + b['top'][0]['rep']) >= 300:
-            p0 = b['top'][0]; alerta('viral', 1, 'Publicación con mucha difusión en Bluesky', '@%s: %d me gusta y %d republicaciones. «%s…»' % (p0['a'], p0['likes'], p0['rep'], p0['t'][:110].replace('\n', ' ')), {'u': p0['u']})
+        if b['top'] and (b['top'][0]['likes'] + b['top'][0]['rep']) >= 300 and b['top'][0]['u'] not in vistos_u:
+            p0 = b['top'][0]; vistos_u.add(p0['u']); alerta('viral', 1, 'Publicación con mucha difusión en Bluesky', '@%s: %d me gusta y %d republicaciones. «%s…»' % (p0['a'], p0['likes'], p0['rep'], p0['t'][:110].replace('\n', ' ')), {'u': p0['u']})
     al.sort(key=lambda a: -a['sev'])
     # ---- ficheros por día ----
     pordia = collections.defaultdict(list)
@@ -418,10 +453,13 @@ def publicar():
     med = collections.Counter(medio(ITEMS[i][2]) for i in CORPUS)
     inf_p = os.path.join(W, 'informe.json')
     ult = {'generado': raw['gen'], 'fecha': HOY, 'ventana': [GEN_MIN - 1440, GEN_MIN], 'pol': polstats, 'tem': temstats, 'historias': hist, 'bsky': bsky, 'x': xt, 'google': gt, 'meneame': mn[:25],
-           'alertas': al, 'corpus': {'n': len(CORPUS), 'medios': dict(med)},
+           'alertas': al, 'youtube': yt, 'telegram': tg, 'corpus': {'n': len(CORPUS), 'medios': dict(med)},
            'cobertura': {'consultas': len(raw['q']) + len(raw['tp']), 'noticias': len(ITEMS), 'clasificadas': sum(1 for c in et.values() if c != '----'), 'errores': len(raw['err']), 'ms': raw['ms'],
-                         'bluesky': sum(b['n'] for b in bsky.values()), 'wikipedia': len(wiki), 'saturadas': sorted({s[0] for s in SAT}), 'provAnteriores': ARR[0]},
-           'informe': json.load(open(inf_p)) if os.path.exists(inf_p) else None}
+                         'bluesky': sum(b['n'] for b in bsky.values()), 'wikipedia': len(wiki), 'saturadas': sorted({s[0] for s in SAT}), 'provAnteriores': ARR[0],
+                         'provGenerado': raw.get('provGenerado') or ((ANT.get('cobertura') or {}).get('provGenerado') if ARR[0] else raw['gen']),
+                         'youtube': sum(1 for c in (yt or {}).get('canales', []) if c['ok']), 'telegram': sum(1 for c in (tg or {}).get('canales', []) if c['ok'])},
+           'informe': json.load(open(inf_p)) if os.path.exists(inf_p) else None,
+           'avisos': sorted(set((raw['cfg'].get('aviso') or []) + (CAT.get('avisos') or [])))}
     if not ult['informe'] or '--auto-informe' in sys.argv: ult['informe'] = informe_auto(ult)
     json.dump(ult, open(os.path.join(DATA, 'ultimo.json'), 'w'), ensure_ascii=False, separators=(',', ':'))
     if ult['informe']: json.dump({'fecha': HOY, 'generado': raw['gen'], 'informe': ult['informe']}, open(os.path.join(DATA, 'informe-%s.json' % HOY), 'w'), ensure_ascii=False)

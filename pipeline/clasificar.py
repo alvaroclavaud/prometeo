@@ -96,7 +96,7 @@ def main():
     try: cand = modelos()
     except Exception as e:
         open(sal, 'w').close(); print('No se pudo consultar la lista de modelos:', repr(e)[:120]); return
-    nombres = {p[0]: p[2] for p in json.load(open(os.path.join(W, 'config.json')))['pol']}
+    import seguimiento; nombres = {p[0]: p[2] for p in seguimiento.config()['pol']}
     et, modelo = {}, None
     ya = previas()
     for n, r in enumerate(filas):

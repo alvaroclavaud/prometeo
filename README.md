@@ -2,17 +2,29 @@
 
 Panel de escucha social de Prometeo Consultores. Todo funciona con fuentes públicas y servicios gratuitos.
 
-- **Panel**: `index.html` (página única). Lee los ficheros de `data/`.
-- **Recogida automática**: `.github/workflows/recogida.yml` recoge cuatro veces al día (6:12, 12:12, 18:12 y 23:12, hora peninsular española, todo el año) en GitHub Actions y también a mano desde la pestaña *Actions* → *Recogida de Prometeo* → *Run workflow*. El programador de GitHub puede retrasarse, así que el flujo se despierta cada hora: si los datos publicados son anteriores al último turno previsto (por un retraso o porque un turno falló), recoge en ese momento; si están al día, termina en segundos. Nunca publica datos incompletos de personas o temas; si no da tiempo a consultar todas las provincias, conserva el último dato del mapa.
-- **Qué recoge** (`pipeline/recoger.py`): Google News (medios españoles y las 17 cabeceras del piloto), Bluesky, visitas de Wikipedia, tendencias de X en España, Menéame y búsquedas en alza de Google.
-- **Qué calcula** (`pipeline/prom.py`): presencia y cuota por político, titulares, zonas calientes por provincia, historias del día, alertas e informe diario.
-- **Tono y postura** (`pipeline/clasificar.py`): se clasifican con el nivel gratuito de Gemini si el repositorio tiene el secreto `GEMINI_API_KEY`. Sin él, el panel funciona igual y muestra los titulares como «sin clasificar». Los titulares ya clasificados no se vuelven a enviar al modelo, y un fallo o un límite de uso del modelo no impide publicar la recogida.
+## Qué se sigue: `seguimiento.yml`
+Es el único fichero que hay que tocar para cambiar personas, cargos, partidos y colores, nivel 1 (seguimiento en profundidad, hasta 5), cabeceras, temas, canales de YouTube y canales de Telegram. Se edita en GitHub con el lápiz («Edit this file») y la siguiente recogida ya lo usa. Si tiene un error, la recogida sigue con la última versión buena (`data/seguimiento.json`) y el panel muestra el aviso con la línea del error.
 
-## Cambiar a quién y qué se sigue
-- `pipeline/config.json`: consultas de cada político (`pol`), nivel 1 (`n1`), cabeceras (`med`), temas (`tem`) y provincias.
-- `pipeline/catalogo.py`: nombre, partido, cargo y alias en titulares de cada persona; nombres de temas y cabeceras.
+Desde el panel de Claude (Ajustes) también se puede cambiar el nivel 1, añadir personas o temas y cambiar cargos: la tarea de Claude copia esos cambios a `pipeline/ajustes-panel.json` antes de cada recogida y se aplican encima de `seguimiento.yml`.
+
+## Cómo funciona
+- **Panel**: `index.html` (estructura), `app.js` (código) y `app.css` (estilos). Lee los ficheros de `data/`. Web pública: https://alvaroclavaud.github.io/prometeo/
+- **Reloj**: la tarea programada de Claude «Prometeo · reloj y copia al panel» lanza la recogida a las 6:13, 12:13, 18:13 y 23:13 (hora peninsular española), espera a que termine y copia los datos al panel de Claude. Si una recogida falla, la relanza una vez.
+- **Respaldo**: `.github/workflows/recogida.yml` también se despierta cada hora por su cuenta (el programador de GitHub llega tarde o no llega, por eso no es el reloj principal). El paso «Turno» solo recoge si los datos publicados son anteriores al último turno previsto. A mano: pestaña *Actions* → *Recogida de Prometeo* → *Run workflow*.
+- **Qué recoge** (`pipeline/recoger.py`): Google News (medios españoles y las 17 cabeceras del piloto), Bluesky, visitas de Wikipedia, tendencias de X en España, Menéame, búsquedas en alza de Google, y los últimos vídeos y mensajes de canales públicos de YouTube y Telegram.
+- **Qué calcula** (`pipeline/prom.py`): presencia y cuota por político, titulares, zonas calientes por provincia, historias del día, YouTube y Telegram, alertas e informe automático.
+- **Tono y postura** (`pipeline/clasificar.py`) e **informe redactado** (`pipeline/redactar.py`): nivel gratuito de Gemini con el secreto `GEMINI_API_KEY`. Cada cifra del informe redactado se comprueba contra los datos; si aparece alguna que no está, se queda el informe automático.
+
+## Reglas para que no falle
+- Un solo hilo a Google News con pausa adaptativa: si Google frena (errores 429), baja el ritmo; si no responde nada, se abandona sin publicar y el siguiente turno lo reintenta desde otro servidor.
+- Personas, cabeceras y temas son esenciales: si falta alguno tras la repesca, no se publica nada. El mapa por provincias se renueva como mucho cada 9 horas y, si no da tiempo, conserva el último.
+- Control de calidad: si salen menos de la mitad de noticias que en la recogida anterior, no se publica.
+- La clasificación, el informe con Gemini, YouTube y Telegram nunca impiden publicar.
+- Las cifras de un día ya publicado no bajan al recalcularlo.
+- Antes de publicar se comprueba que todos los JSON son válidos; el envío a GitHub se reintenta cuatro veces.
 
 ## Límites
 - Google News devuelve como máximo 100 resultados por consulta.
 - X no permite leer publicaciones gratis: se siguen sus tendencias.
+- YouTube y Telegram: solo canales públicos de la lista y sus últimos vídeos o mensajes (unos 15-20 por canal).
 - Facebook, Instagram, LinkedIn y TikTok no ofrecen acceso de escucha gratuito.
